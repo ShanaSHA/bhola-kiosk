@@ -18,7 +18,7 @@
       }
     },
     {
-      "source": "/((?!api/|assets/|media/).*)",
+      "source": "/(.*)",
       "destination": {
         "service": "frontend"
       }
