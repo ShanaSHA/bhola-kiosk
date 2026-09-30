@@ -1,0 +1,180 @@
+{
+  "welcome": {
+    "title": "Advanced Dermatology.\nPersonalized Care.",
+    "description": "Explore dermatology, aesthetic, laser and hair treatments — with care centered around you.",
+    "title_ar": "طب جلدية متقدم.\nرعاية شخصية.",
+    "description_ar": "اكتشف علاجات الجلدية والتجميل والليزر والشعر — برعاية تتمحور حول احتياجاتك.",
+    "video_url": "/media/clinic-intro.mp4",
+    "language_video_url": "/media/language-intro.mp4"
+  },
+  "about": {
+    "overview": "Dr. Ashish Bhola Dermatology Center brings together dermatology, facial aesthetics, advanced skin treatments and laser technologies in Doha. Established in 2018, the clinic is led by Dr. Ashish Bhola.",
+    "profile": "A personalized approach to skin health and aesthetic care.",
+    "vision": "",
+    "mission": "",
+    "aim": "",
+    "whyChoose": "Specialist-led care, personalized treatment planning and advanced technology.",
+    "technology": "Explore our laser treatments and advanced devices.",
+    "patientCare": "Speak with our clinical team about the care that is right for you.",
+    "overview_ar": "يجمع مركز د. أشيش بهولا للأمراض الجلدية في الدوحة بين طب الجلدية وتجميل الوجه وعلاجات البشرة المتقدمة وتقنيات الليزر. تأسس المركز عام 2018 ويقوده د. أشيش بهولا.",
+    "profile_ar": "نهج شخصي لصحة البشرة والرعاية التجميلية.",
+    "vision_ar": "",
+    "mission_ar": "",
+    "aim_ar": "",
+    "whyChoose_ar": "رعاية بإشراف اختصاصي، وخطط علاج شخصية وتقنيات متقدمة.",
+    "technology_ar": "اكتشف علاجات الليزر والأجهزة المتقدمة لدينا.",
+    "patientCare_ar": "تحدث مع فريقنا الطبي لمعرفة الرعاية المناسبة لك."
+  },
+  "contact": {
+    "address": "Villa 32, Zone 55, Street 120, P.O. Box 90789, Doha, Qatar",
+    "telephone": "+974 4483 7373",
+    "telephone2": "+974 4417 7373",
+    "mobile": "+974 5080 4545",
+    "email": "",
+    "hours": "",
+    "instagram": "https://www.instagram.com/dr.ashishbholaclinic/",
+    "facebook": "",
+    "tiktok": "",
+    "map": "https://www.google.com/maps/search/?api=1&query=Dr.+Ashish+Bhola+Dermatology+Center+Doha",
+    "address_ar": "فيلا 32، المنطقة 55، شارع 120، ص.ب 90789، الدوحة، قطر",
+    "telephone_ar": "+974 4483 7373",
+    "telephone2_ar": "+974 4417 7373",
+    "mobile_ar": "+974 5080 4545",
+    "email_ar": "",
+    "hours_ar": ""
+  },
+  "categories": [
+    {
+      "id": "facial",
+      "name": "Facial & Aesthetic",
+      "description": "Glow, lift & rejuvenation",
+      "image": "/media/image26.webp",
+      "order": "1",
+      "name_ar": "الوجه والتجميل",
+      "description_ar": "إشراقة وشد وتجديد"
+    },
+    {
+      "id": "skin",
+      "name": "Advanced Skin Therapies",
+      "description": "Renewal & repair",
+      "image": "/media/image27.webp",
+      "order": "2",
+      "name_ar": "علاجات البشرة المتقدمة",
+      "description_ar": "تجديد وإصلاح"
+    },
+    {
+      "id": "laser",
+      "name": "Laser Treatments",
+      "description": "Precision & technology",
+      "image": "/media/image28.webp",
+      "order": "3",
+      "name_ar": "علاجات الليزر",
+      "description_ar": "دقة وتقنية متقدمة"
+    },
+    {
+      "id": "devices",
+      "name": "Advanced Devices",
+      "description": "Innovation in skin care",
+      "image": "/media/image29.webp",
+      "order": "4",
+      "name_ar": "الأجهزة المتقدمة",
+      "description_ar": "ابتكار في العناية بالبشرة"
+    },
+    {
+      "id": "hair",
+      "name": "Hair Treatments",
+      "description": "Regrowth & restoration",
+      "image": "/media/image30.webp",
+      "order": "5",
+      "name_ar": "علاجات الشعر",
+      "description_ar": "استعادة ونمو الشعر"
+    }
+  ],
+  "services": [
+    {
+      "id": "hydrafacial",
+      "name": "Hydrafacial",
+      "category": "facial",
+      "image": "/media/image42.png",
+      "description": "A multi-step treatment that cleanses, exfoliates, extracts and hydrates the skin for a refreshed glow.",
+      "benefits": "Deep cleansing\nHydration\nSkin brightening\nImproved texture",
+      "related": "Chemical Peels, Medical-Grade Facials",
+      "name_ar": "هيدرافيشل",
+      "description_ar": "علاج متعدد الخطوات ينظف البشرة ويقشرها ويزيل الشوائب ويرطبها لمنحها إشراقة وانتعاشاً",
+      "benefits_ar": "تنظيف عميق\nترطيب\nإشراقة البشرة\nتحسين ملمس البشرة",
+      "related_ar": "التقشير الكيميائي، علاجات الوجه الطبية"
+    },
+    {
+      "id": "facial-0",
+      "name": "Botox & Dermal Fillers",
+      "category": "facial",
+      "image": "/media/image34.webp",
+      "description": "Refine and restore volume.",
+      "name_ar": "البوتوكس والفيلر",
+      "description_ar": "تحسين الملامح واستعادة الحجم."
+    },
+    {
+      "id": "facial-1",
+      "name": "Chemical Peels",
+      "category": "facial",
+      "image": "/media/image35.webp",
+      "description": "Resurface and brighten.",
+      "name_ar": "التقشير الكيميائي",
+      "description_ar": "تجديد سطح البشرة وإضفاء الإشراقة."
+    },
+    {
+      "id": "facial-2",
+      "name": "Medical-Grade Facials",
+      "category": "facial",
+      "image": "/media/image36.webp",
+      "description": "Customized skin therapy.",
+      "name_ar": "علاجات الوجه الطبية",
+      "description_ar": "عناية مخصصة للبشرة."
+    },
+    {
+      "id": "facial-3",
+      "name": "Facial Mapping",
+      "category": "facial",
+      "image": "/media/image37.webp",
+      "description": "Skin assessment and planning.",
+      "name_ar": "تحليل وتخطيط الوجه",
+      "description_ar": "تقييم البشرة ووضع خطة مناسبة."
+    },
+    {
+      "id": "facial-4",
+      "name": "Non-Surgical Face Lift",
+      "category": "facial",
+      "image": "/media/image38.webp",
+      "description": "Explore lift and contour treatments.",
+      "name_ar": "شد الوجه غير الجراحي",
+      "description_ar": "اكتشف علاجات الشد وتحسين تحديد الملامح."
+    }
+  ],
+  "doctors": [
+    {
+      "id": "ashish",
+      "name": "Dr. Ashish Bhola",
+      "image": "/media/image44.png",
+      "qualification": "Specialist Dermatologist",
+      "specialization": "Owner & Medical Director",
+      "experience": "23+",
+      "description": "Dr. Ashish Bhola leads the clinic with a personalized approach to dermatology, facial aesthetics, advanced skin treatments and laser technologies.",
+      "expertise": "Dermatology\nFacial Aesthetics\nAdvanced Skin Treatments\nLaser Technologies",
+      "name_ar": "د. أشيش بهولا",
+      "qualification_ar": "اختصاصي أمراض جلدية",
+      "specialization_ar": "المالك والمدير الطبي",
+      "experience_ar": "23+",
+      "description_ar": "يقود د. أشيش بهولا المركز بنهج شخصي في طب الجلدية وتجميل الوجه وعلاجات البشرة المتقدمة وتقنيات الليزر.",
+      "expertise_ar": "طب الجلدية\nتجميل الوجه\nعلاجات البشرة المتقدمة\nتقنيات الليزر"
+    }
+  ],
+  "packages": [],
+  "banners": [
+    {
+      "id": "welcome",
+      "name": "Personalized skin care",
+      "image": "/media/image42.png",
+      "name_ar": "عناية شخصية بالبشرة"
+    }
+  ]
+}

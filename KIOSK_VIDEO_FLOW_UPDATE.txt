@@ -1,0 +1,10 @@
+VISITOR FLOW
+
+1. Welcome screen, with the existing welcome video.
+2. Language selection, with the existing separate language video.
+3. Home, after choosing English or Arabic.
+4. Categories, services, details, doctors, clinic information, packages and contact.
+
+Fresh visits/reloads always begin at Welcome. Tap Touch to begin or the welcome video, or wait for that video to finish. Language selection waits for the visitor to choose. Video loading failure retains a clinic photograph and usable controls.
+
+The approved visitor design is black and maroon with white tile titles. The logo retains its original colours within the curved light header area. Admin screens are retained.
