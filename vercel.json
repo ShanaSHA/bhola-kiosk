@@ -18,12 +18,6 @@
       }
     },
     {
-      "source": "/django-admin/(.*)",
-      "destination": {
-        "service": "backend"
-      }
-    },
-    {
       "source": "/(.*)",
       "destination": {
         "service": "frontend"
