@@ -436,3 +436,163 @@
         min-height: 75px !important;
     }
 }
+/* =========================================================
+   FOOTER NAVIGATION — SAME POSITION / SAME ALIGNMENT
+   ========================================================= */
+
+.visitor-app .footer {
+    border-top: 1px solid #49323c;
+    min-height: 82px;
+    padding: 15px 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: linear-gradient(
+        180deg,
+        #191317 0%,
+        #120e11 100%
+    );
+
+    box-shadow: 0 -8px 25px rgba(0,0,0,.22);
+}
+
+.visitor-app .footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+/* ALL FOOTER BUTTONS — SAME STYLE */
+.visitor-app .footer-actions button {
+    min-height: 48px;
+    padding: 11px 21px;
+
+    border: 1px solid #57414b;
+    border-radius: 28px;
+
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,.045),
+        rgba(255,255,255,.012)
+    );
+
+    color: #f7f0f3;
+
+    font-family: Arial, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+
+    letter-spacing: .01em;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease,
+        color .2s ease;
+}
+
+/* HOVER */
+.visitor-app .footer-actions button:hover {
+    transform: translateY(-2px);
+
+    border-color: #8a1538;
+
+    background: linear-gradient(
+        135deg,
+        rgba(138,21,56,.24),
+        rgba(138,21,56,.08)
+    );
+
+    box-shadow: 0 7px 18px rgba(0,0,0,.25);
+
+    color: #fff;
+}
+
+/* CLICK */
+.visitor-app .footer-actions button:active {
+    transform: scale(.96);
+}
+
+/* DISABLED BACK */
+.visitor-app .footer-actions button:disabled {
+    opacity: .35;
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+}
+
+/* IMPORTANT:
+   Remove the old special HOME color.
+   Every button now has the same normal appearance.
+*/
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@container (max-width:610px) {
+
+    .visitor-app .footer {
+        min-height: auto;
+        padding: 11px 12px 13px;
+
+        display: block;
+    }
+
+    .visitor-app .footer-actions {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 7px;
+    }
+
+    .visitor-app .footer-actions button {
+        width: 100%;
+        min-width: 0;
+
+        min-height: 45px;
+
+        padding: 9px 5px;
+
+        border-radius: 14px;
+
+        font-size: 11px;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width:380px) {
+
+    .visitor-app .footer {
+        padding: 9px 10px 11px;
+    }
+
+    .visitor-app .footer-actions {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 6px;
+    }
+
+    .visitor-app .footer-actions button {
+        min-height: 43px;
+        border-radius: 13px;
+        font-size: 10px;
+    }
+}

@@ -276,20 +276,9 @@ export default function Visitor(){
 
     </div>
 
-    <span className="page-status">{status}</span>
+    
 
-    {page + 1 < totalPages && (
-      <button
-        className="main"
-        onClick={() => setPosition(p => ({
-          ...p,
-          page: p.page + 1
-        }))}
-      >
-        {t('Next →', 'التالي ←')}
-      </button>
-    )}
-
+   
     </footer>
 )}
 
