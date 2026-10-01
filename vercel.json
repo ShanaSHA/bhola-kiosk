@@ -5,8 +5,7 @@
       "root": "frontend/"
     },
     "backend": {
-      "root": "backend/",
-      "entrypoint": "config/wsgi.py"
+      "root": "backend/"
     }
   },
   "rewrites": [
