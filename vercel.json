@@ -2,12 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "services": {
     "frontend": {
-      "root": "frontend/",
-      "framework": "vite"
+      "root": "frontend/"
     },
     "backend": {
       "root": "backend/",
-      "framework": "django"
+      "entrypoint": "config/wsgi.py"
     }
   },
   "rewrites": [
