@@ -83,3 +83,356 @@
  .visitor-app .detail{grid-template-rows:minmax(350px,1fr) auto}.visitor-app .detail-photo{min-height:350px}.visitor-app .detail-copy{padding:20px 0}.visitor-app .detail-copy h2{font-size:32px}.visitor-app .detail-tabs button{font-size:22px;padding:20px 0}.visitor-app .fine{font-size:18px!important}
  .visitor-app .benefits li{font-size:24px}.visitor-app .welcome-copy h1{font-size:74px}.visitor-app .welcome-copy p{font-size:25px}.visitor-app .welcome-photo{margin:0 65px}.visitor-app .welcome-copy .action{font-size:26px;min-height:90px}.visitor-app .lang-picks button{font-size:35px;padding:30px}.visitor-app .lang-picks small{font-size:20px}
 }
+/* =========================================================
+   WELCOME + LANGUAGE SCREENS — CLEAN FINAL VERSION
+   ========================================================= */
+
+.visitor-app .stage-welcome,
+.visitor-app .stage-language {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+
+/* =========================================================
+   FULL SCREEN CONTAINER
+   ========================================================= */
+
+.visitor-app .stage-welcome .welcome-screen,
+.visitor-app .stage-language .welcome-screen {
+    position: absolute !important;
+
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    display: grid !important;
+    place-items: center !important;
+}
+
+
+/* =========================================================
+   BACKGROUND VIDEO
+   ========================================================= */
+
+.visitor-app .stage-welcome .welcome-video,
+.visitor-app .stage-language .welcome-video {
+    position: absolute !important;
+
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: cover !important;
+    object-position: center center !important;
+
+    display: block !important;
+
+    z-index: 0 !important;
+}
+
+
+/* =========================================================
+   DARK OVERLAY
+   ========================================================= */
+
+.visitor-app .stage-welcome .welcome-overlay,
+.visitor-app .stage-language .welcome-overlay {
+    position: absolute !important;
+
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    background: rgba(0,0,0,.32) !important;
+
+    z-index: 1 !important;
+}
+
+
+/* =========================================================
+   WELCOME / LANGUAGE CONTENT
+   ========================================================= */
+
+.visitor-app .stage-welcome .welcome-content,
+.visitor-app .stage-language .welcome-content {
+    position: relative !important;
+
+    z-index: 2 !important;
+
+    width: min(90vw, 700px) !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: calc(100% - 40px) !important;
+
+    margin: 0 !important;
+    padding: 20px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    text-align: center !important;
+
+    overflow: visible !important;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+/* =========================================================
+   WELCOME + LANGUAGE LOGO
+   ========================================================= */
+
+.visitor-app .stage-welcome .welcome-logo,
+.visitor-app .stage-language .welcome-logo {
+    display: block !important;
+
+    width: min(320px, 40vw) !important;
+    max-width: 320px !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 auto 24px auto !important;
+    padding: 0 !important;
+
+    object-fit: contain !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+/* =========================================================
+   KICKER
+   ========================================================= */
+
+.visitor-app .stage-welcome .welcome-kicker,
+.visitor-app .stage-language .welcome-kicker {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 14px 0 !important;
+
+    text-align: center !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 13px !important;
+    font-weight: 600 !important;
+
+    letter-spacing: 3px !important;
+    line-height: 1.4 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   HEADINGS
+   ========================================================= */
+
+.visitor-app .stage-welcome .welcome-content h1,
+.visitor-app .stage-language .language-selection h1 {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+
+    text-align: center !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: clamp(36px, 5vw, 64px) !important;
+    font-weight: 700 !important;
+
+    line-height: 1.1 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   WELCOME TEXT
+   ========================================================= */
+
+.visitor-app .stage-welcome .welcome-video-prompt p {
+    margin: 24px 0 0 0 !important;
+
+    text-align: center !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 17px !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   LANGUAGE SUBTITLE
+   ========================================================= */
+
+.visitor-app .stage-language .language-selection > p {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 12px 0 25px 0 !important;
+
+    text-align: center !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 20px !important;
+    line-height: 1.5 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   LANGUAGE BUTTONS
+   ========================================================= */
+
+.visitor-app .stage-language .language-actions {
+    display: flex !important;
+
+    flex-direction: row !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+    max-width: 540px !important;
+
+    margin: 0 auto !important;
+
+    gap: 20px !important;
+}
+
+
+.visitor-app .stage-language .language-actions button {
+    width: 250px !important;
+
+    min-height: 90px !important;
+
+    margin: 0 !important;
+    padding: 18px 20px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    text-align: center !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.visitor-app .stage-language .language-actions button span {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 6px 0 !important;
+
+    text-align: center !important;
+
+    font-size: 24px !important;
+    font-weight: 700 !important;
+
+    color: #ffffff !important;
+}
+
+
+.visitor-app .stage-language .language-actions button small {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+
+    text-align: center !important;
+
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+
+    color: rgba(255,255,255,.9) !important;
+}
+
+
+/* =========================================================
+   SMALL SCREENS
+   ========================================================= */
+
+@media (max-width:700px) {
+
+    .visitor-app .stage-welcome .welcome-content,
+    .visitor-app .stage-language .welcome-content {
+        width: 94vw !important;
+        padding: 15px !important;
+    }
+
+   .visitor-app .stage-welcome .welcome-logo,
+.visitor-app .stage-language .welcome-logo {
+    width: min(240px, 65vw) !important;
+    max-width: 240px !important;
+    margin-bottom: 18px !important;
+}
+
+    .visitor-app .stage-language .language-selection h1 {
+        font-size: 34px !important;
+    }
+
+    .visitor-app .stage-language .language-selection > p {
+        font-size: 18px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .visitor-app .stage-language .language-actions {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    .visitor-app .stage-language .language-actions button {
+        width: min(320px, 90vw) !important;
+        min-height: 75px !important;
+    }
+}

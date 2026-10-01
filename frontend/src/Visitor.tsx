@@ -31,7 +31,7 @@ export default function Visitor(){
  function back(){if(page>0){setPosition(p=>({...p,page:p.page-1}));return}const previous=history.at(-1);if(previous){setPosition(previous);setHistory(h=>h.slice(0,-1))}}
  const cats=[...data.categories].sort((a,b)=>Number(a.order||0)-Number(b.order||0));
  const cat=data.categories.find(c=>c.id===categoryId);
- let totalPages=1,status=t('Dr. Ashish Bhola · Dermatology Center','د. أشيش بهولا · مركز الأمراض الجلدية');
+ let totalPages=1,status='';
  const arrow=<span className="circle-arrow" aria-hidden="true">{t('↗','↖')}</span>;
  function tile(name:string,sub:string,src:string|undefined,onClick:()=>void,cls=''){return <button className={`tile ${cls}`} onClick={onClick}><Photo src={src}/><span className="tile-label"><span>{sub&&<small>{sub}</small>}<strong>{name}</strong></span>{arrow}</span></button>}
  function heading(ey:string,title:string,sub=''){return <div className="section-head"><div><div className="eyebrow">{ey}</div><h1>{title}</h1></div>{sub&&<p>{sub}</p>}</div>}
@@ -40,10 +40,137 @@ export default function Visitor(){
  function list(items:Item[],next:Screen){totalPages=Math.max(1,Math.ceil(items.length/pageSize));return items.length?<div className="collection">{items.slice(page*pageSize,page*pageSize+pageSize).map(i=><div className="tile-holder" key={i.id}>{tile(field(i,'name'),t('VIEW DETAILS','عرض التفاصيل'),i.image,()=>go(next,{itemId:i.id}))}</div>)}</div>:<div className="empty-state"><h2>{t('Speak with our reception team','تحدث مع فريق الاستقبال')}</h2><p>{t('Please contact reception for information and current availability.','يرجى التواصل مع الاستقبال للحصول على المعلومات والتفاصيل الحالية.')}</p>{action(t('Contact our clinic','تواصل مع المركز'),'contact')}</div>}
  let body:ReactNode;
  if(screen==='welcome'||screen==='language'){
-  const language=screen==='language';const video=mediaUrl(language?data.welcome.language_video_url:data.welcome.video_url);
-  body=<div className="welcome"><div className="welcome-copy"><div className="eyebrow">DR. ASHISH BHOLA · DOHA</div><h1>{language?<>Choose your<br/><span>language.</span></>:<>Welcome.<br/><span lang="ar">أهلاً بكم</span></>}</h1><p>{language?'اختر لغتك للمتابعة':t('Discover our clinic, our specialists and the care available to you.','اكتشف مركزنا وأطباءنا والرعاية المتاحة لك.')}</p>{language?<div className="lang-picks"><button onClick={()=>{setLang('en');go('home')}}>English<small>Continue →</small></button><button dir="rtl" onClick={()=>{setLang('ar');go('home')}}>العربية<small>متابعة ←</small></button></div>:action('Touch to begin','language')}</div><div className="welcome-photo" onClick={()=>{if(!language)go('language')}}>{video?<video key={video+screen} src={video} poster="/media/image3.jpg" autoPlay muted playsInline loop={language} onEnded={()=>{if(!language)go('language')}} onError={e=>{e.currentTarget.style.display='none'}}/>:null}<Photo src="/media/image3.jpg" alt="Clinic reception"/></div></div>;
-  status=language?'English · العربية':'Welcome · أهلاً بكم';
- }else if(error||!loaded){body=<div className="empty-state"><h1>{t('Welcome','مرحباً')}</h1><p role={error?'alert':undefined}>{error||t('Loading clinic information…','جارٍ تحميل معلومات المركز…')}</p>{error&&<button className="action" onClick={()=>void load()}>{t('Try again','حاول مرة أخرى')}</button>}</div>}
+  const language=screen==='language';
+
+  const welcomeVideo=
+    mediaUrl(data.welcome.video_url)||'/media/clinic-intro.mp4';
+
+  const languageVideo=
+    mediaUrl(data.welcome.language_video_url)||'/media/language-intro.mp4';
+
+  const videoType=(url:string)=>
+    url.toLowerCase().endsWith('.webm')
+      ? 'video/webm'
+      : 'video/mp4';
+
+  body=(
+    <div
+      className={`welcome-screen ${language?'language-phase':''}`}
+      onClick={()=>!language&&go('language')}
+    >
+
+      {!language ? (
+        <>
+          <video
+            key={welcomeVideo}
+            className="welcome-video"
+            autoPlay
+            muted
+            playsInline
+            poster="/media/dr-ashish-bhola-logo.jpg"
+            onEnded={()=>go('language')}
+          >
+            <source
+              src={welcomeVideo}
+              type={videoType(welcomeVideo)}
+            />
+          </video>
+
+          <div className="welcome-overlay"/>
+
+          <div className="welcome-content welcome-video-prompt">
+
+           <img
+  src="/media/dr_ashish_bhola_logo_website_transparent.png"
+  className="welcome-logo"
+  alt="Dr. Ashish Bhola Dermatology Center"
+/>
+            <span className="welcome-kicker">
+              DR. ASHISH BHOLA · DOHA
+            </span>
+
+            <h1>
+              Welcome.
+              <br/>
+              <span>Discover Your Care.</span>
+            </h1>
+
+            <p>Tap anywhere to continue</p>
+
+          </div>
+        </>
+      ) : (
+        <>
+          <video
+            key={languageVideo}
+            className="welcome-video language-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/media/dr-ashish-bhola-logo.jpg"
+          >
+            <source
+              src={languageVideo}
+              type={videoType(languageVideo)}
+            />
+          </video>
+
+          <div className="welcome-overlay language-overlay"/>
+
+          <div className="welcome-content language-selection">
+
+           <img
+  src="/media/dr_ashish_bhola_logo_website_transparent.png"
+  className="welcome-logo"
+  alt="Dr. Ashish Bhola Dermatology Center"
+/>
+
+            <span className="welcome-kicker">
+              DR. ASHISH BHOLA · DOHA
+            </span>
+
+            <h1>Choose Your Language</h1>
+
+            <p>اختر لغتك للمتابعة</p>
+
+            <div className="language-actions">
+
+              <button
+                onClick={e=>{
+                  e.stopPropagation();
+                  setLang('en');
+                  go('home');
+                }}
+              >
+                <span>English</span>
+                <small>Continue in English</small>
+              </button>
+
+              <button
+                onClick={e=>{
+                  e.stopPropagation();
+                  setLang('ar');
+                  go('home');
+                }}
+              >
+                <span>العربية</span>
+                <small>المتابعة بالعربية</small>
+              </button>
+
+            </div>
+
+          </div>
+        </>
+      )}
+
+    </div>
+  );
+
+  status=language
+    ? 'English · العربية'
+    : 'Welcome · أهلاً بكم';
+}else if(error||!loaded){body=<div className="empty-state"><h1>{t('Welcome','مرحباً')}</h1><p role={error?'alert':undefined}>{error||t('Loading clinic information…','جارٍ تحميل معلومات المركز…')}</p>{error&&<button className="action" onClick={()=>void load()}>{t('Try again','حاول مرة أخرى')}</button>}</div>}
  else if(screen==='home'){
   const current=slides[banner%slides.length];
   body=<><div className="banner"><div className="banner-copy"><div className="eyebrow">{t('WELCOME TO OUR CLINIC','مرحباً بكم في مركزنا')}</div><h1>{t('Your skin.','بشرتك.')}<br/>{t('Our expertise.','خبرتنا.')}</h1><p>{t('Touch a section to explore.','المس قسماً لاستكشافه.')}</p></div><div className="banner-photo"><Photo src={current.image} className="banner-image"/></div>{slides.length>1&&<div className="banner-controls"><button aria-label={t('Previous banner','الصورة السابقة')} onClick={()=>setBanner(n=>(n-1+slides.length)%slides.length)}>‹</button><button aria-label={paused?t('Play banner','تشغيل العرض'):t('Pause banner','إيقاف العرض')} onClick={()=>setPaused(v=>!v)}>{paused?'▶':'Ⅱ'}</button><button aria-label={t('Next banner','الصورة التالية')} onClick={()=>setBanner(n=>(n+1)%slides.length)}>›</button></div>}</div><nav className="tiles" aria-label={t('Clinic sections','أقسام المركز')}>{tile(t('Explore treatments','استكشف العلاجات'),t('CARE FOR YOUR SKIN','العناية ببشرتك'),data.services[0]?.image||'/media/image42.png',()=>go('categories'))}{tile(t('Medical team','الفريق الطبي'),t('MEET YOUR SPECIALIST','تعرّف على طبيبك'),data.doctors[0]?.image||'/media/image44.png',()=>go('doctors'),'doctor')}{tile(t('Our clinic','مركزنا'),t('GET TO KNOW US','تعرّف علينا'),'/media/image3.jpg',()=>go('about'),'clinic')}{tile(t('Packages','الباقات'),t('TREATMENT OPTIONS','خيارات العلاج'),data.packages[0]?.image||'/media/image27.webp',()=>go('packages'))}{tile(t('Find us','موقعنا'),t('CONTACT & LOCATION','التواصل والموقع'),'/media/image3.jpg',()=>go('contact'),'contact')}</nav></>;
@@ -79,5 +206,94 @@ export default function Visitor(){
   body=detail('/media/image3.jpg',<><div className="eyebrow">{t('CONTACT & LOCATION','التواصل والموقع')}</div><h1>{current?.title||t('Contact','التواصل')}</h1><p className="content-text contact-text">{current?.text}</p></>);
  }
  if(!['welcome','language','home'].includes(screen)&&loaded&&!error)status=t(`${page+1} / ${totalPages} · Clinic information`,`${page+1} / ${totalPages} · معلومات المركز`);
- return <div className="visitor-app"><div className="device"><header className="header"><div className="brand-ribbon"><Photo src="/media/dr-ashish-bhola-logo.jpg" alt="Dr. Ashish Bhola Dermatology Center"/></div>{!['welcome','language'].includes(screen)&&<button className="language" onClick={()=>go('language')}>English / العربية</button>}</header><main ref={mainRef} className={`stage stage-${screen}`} key={screen+page} aria-live="polite">{body}</main><footer className="footer"><div className="footer-actions">{screen!=='welcome'&&<button onClick={back} disabled={!history.length&&page===0}>{t('← Back','عودة →')}</button>}{!['welcome','language'].includes(screen)&&<button onClick={()=>go('home')}>{t('Home','الرئيسية')}</button>}</div><span className="page-status">{status}</span>{page+1<totalPages&&<button className="main" onClick={()=>setPosition(p=>({...p,page:p.page+1}))}>{t('Next →','التالي ←')}</button>}</footer></div></div>;
+ return (
+  <div className="visitor-app">
+    <div className="device">
+
+      {!['welcome', 'language'].includes(screen) && (
+        <header className="header">
+          <div className="brand-ribbon">
+            <Photo
+              src="/media/dr-ashish-bhola-logo.jpg"
+              alt="Dr. Ashish Bhola Dermatology Center"
+            />
+          </div>
+
+          <button
+            className="language"
+            onClick={() => go('language')}
+          >
+            English / العربية
+          </button>
+        </header>
+      )}
+
+      <main
+        ref={mainRef}
+        className={`stage stage-${screen}`}
+        key={screen + page}
+        aria-live="polite"
+      >
+        {body}
+      </main>
+  {!['welcome', 'language'].includes(screen) && (
+  <footer className="footer">
+
+    <div className="footer-actions">
+
+      {screen !== 'welcome' && (
+        <button
+  onClick={back}
+  disabled={!history.length && page === 0}
+>
+  {t('← Back', 'عودة →')}
+</button>
+      )}
+
+      <button onClick={() => go('home')}>
+        {t('Home', 'الرئيسية')}
+      </button>
+
+      <button onClick={() => go('categories')}>
+        {t('Treatments', 'العلاجات')}
+      </button>
+
+      <button onClick={() => go('doctors')}>
+        {t('Medical Team', 'الفريق الطبي')}
+      </button>
+
+      <button onClick={() => go('about')}>
+        {t('Our Clinic', 'مركزنا')}
+      </button>
+
+      <button onClick={() => go('packages')}>
+        {t('Packages', 'الباقات')}
+      </button>
+
+      <button onClick={() => go('contact')}>
+        {t('Find Us', 'موقعنا')}
+      </button>
+
+    </div>
+
+    <span className="page-status">{status}</span>
+
+    {page + 1 < totalPages && (
+      <button
+        className="main"
+        onClick={() => setPosition(p => ({
+          ...p,
+          page: p.page + 1
+        }))}
+      >
+        {t('Next →', 'التالي ←')}
+      </button>
+    )}
+
+    </footer>
+)}
+
+    </div>
+  </div>
+);
 }
