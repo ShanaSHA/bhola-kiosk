@@ -209,7 +209,7 @@ export default function Visitor(){
   const labels:Record<string,[string,string]>={overview:['About Us','ممن نحن'],profile:['Our approach','نهجنا'],vision:['Vision','الرؤية'],mission:['Mission','الرسالة'],aim:['Our aim','هدفنا'],whyChoose:['Why choose us','لماذا تختارنا'],technology:['Technology','التقنيات'],patientCare:['Patient care','رعاية المرضى']};
   const sections=Object.entries(labels).flatMap(([k,label])=>splitText(field(data.about,k)).map(text=>({title:t(...label),text})));
   totalPages=Math.max(1,sections.length);const part=sections[Math.min(page,sections.length-1)];
-  body=detail('/media/image29.webp',<><div className="eyebrow">{t('DR. ASHISH BHOLA · DOHA','د. أشيش بهولا · الدوحة')}</div><h1>{part?.title||t('About Us','من نحن')}</h1><p className="content-text">{part?.text||t('Please speak to our team to learn more.','تحدث مع فريقنا لمعرفة المزيد.')}</p></>);
+  body=detail('/media/image29.webp',<><h1>{part?.title||t('About Us','من نحن')}</h1><p className="content-text">{part?.text||t('Please speak to our team to learn more.','تحدث مع فريقنا لمعرفة المزيد.')}</p></>);
  }else{
   const groups=[{title:t('Visit our clinic','زوروا مركزنا'),values:[field(data.contact,'address'),field(data.contact,'hours')]},{title:t('Speak to our team','تحدث مع فريقنا'),values:[field(data.contact,'telephone'),field(data.contact,'telephone2'),field(data.contact,'mobile'),field(data.contact,'email')]},{title:t('Online','عبر الإنترنت'),values:['instagram','facebook','tiktok','map'].map(k=>data.contact[k]).filter(Boolean)}].filter(g=>g.values.some(Boolean));
   const pages=groups.flatMap(g=>splitText(g.values.filter(Boolean).join('\n\n')).map(text=>({title:g.title,text})));
