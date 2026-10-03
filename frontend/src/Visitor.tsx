@@ -100,9 +100,7 @@ export default function Visitor(){
   className="welcome-logo"
   alt="Dr. Ashish Bhola Dermatology Center"
 />
-            <span className="welcome-kicker">
-              DR. ASHISH BHOLA · DOHA
-            </span>
+           
 
             <h1>
               Welcome.
@@ -141,9 +139,7 @@ export default function Visitor(){
   alt="Dr. Ashish Bhola Dermatology Center"
 />
 
-            <span className="welcome-kicker">
-              DR. ASHISH BHOLA · DOHA
-            </span>
+            
 
             <h1>Choose Your Language</h1>
 
@@ -188,13 +184,13 @@ export default function Visitor(){
 }else if(error||!loaded){body=<div className="empty-state"><h1>{t('Welcome','مرحباً')}</h1><p role={error?'alert':undefined}>{error||t('Loading clinic information…','جارٍ تحميل معلومات المركز…')}</p>{error&&<button className="action" onClick={()=>void load()}>{t('Try again','حاول مرة أخرى')}</button>}</div>}
  else if(screen==='home'){
   const current=slides[banner%slides.length];
-  body=<><div className="banner"><div className="banner-copy"><div className="eyebrow">{t('WELCOME TO OUR CLINIC','مرحباً بكم في مركزنا')}</div><h1>{t('Your skin.','بشرتك.')}<br/>{t('Our expertise.','خبرتنا.')}</h1><p>{t('Touch a section to explore.','المس قسماً لاستكشافه.')}</p></div><div className="banner-photo"><Photo src={current.image} className="banner-image"/></div>{slides.length>1&&<div className="banner-controls"><button aria-label={t('Previous banner','الصورة السابقة')} onClick={()=>setBanner(n=>(n-1+slides.length)%slides.length)}>‹</button><button aria-label={paused?t('Play banner','تشغيل العرض'):t('Pause banner','إيقاف العرض')} onClick={()=>setPaused(v=>!v)}>{paused?'▶':'Ⅱ'}</button><button aria-label={t('Next banner','الصورة التالية')} onClick={()=>setBanner(n=>(n+1)%slides.length)}>›</button></div>}</div><nav className="tiles" aria-label={t('Clinic sections','أقسام المركز')}>{tile(t('Explore treatments','استكشف العلاجات'),t('CARE FOR YOUR SKIN','العناية ببشرتك'),data.services[0]?.image||'/media/image42.png',()=>go('categories'))}{tile(t('Medical team','الفريق الطبي'),t('MEET YOUR SPECIALIST','تعرّف على طبيبك'),data.doctors[0]?.image||'/media/image44.png',()=>go('doctors'),'doctor')}{tile(t('Our clinic','مركزنا'),t('GET TO KNOW US','تعرّف علينا'),'/media/image29.webp',()=>go('about'),'clinic')}{tile(t('Packages','الباقات'),t('TREATMENT OPTIONS','خيارات العلاج'),data.packages[0]?.image||'/media/image27.webp',()=>go('packages'))}{tile(t('Find us','موقعنا'),t('CONTACT & LOCATION','التواصل والموقع'),'/media/image3.jpg',()=>go('contact'),'contact')}</nav></>;
+  body=<><div className="banner"><div className="banner-copy"><div className="eyebrow">{t('WELCOME TO OUR CLINIC','مرحباً بكم في مركزنا')}</div><h1>{t('Your skin.','بشرتك.')}<br/>{t('Our expertise.','خبرتنا.')}</h1><p>{t('Touch a section to explore.','المس قسماً لاستكشافه.')}</p></div><div className="banner-photo"><Photo src={current.image} className="banner-image"/></div>{slides.length>1&&<div className="banner-controls"><button aria-label={t('Previous banner','الصورة السابقة')} onClick={()=>setBanner(n=>(n-1+slides.length)%slides.length)}>‹</button><button aria-label={paused?t('Play banner','تشغيل العرض'):t('Pause banner','إيقاف العرض')} onClick={()=>setPaused(v=>!v)}>{paused?'▶':'Ⅱ'}</button><button aria-label={t('Next banner','الصورة التالية')} onClick={()=>setBanner(n=>(n+1)%slides.length)}>›</button></div>}</div><nav className="tiles" aria-label={t('Clinic sections','أقسام المركز')}>{tile(t('Explore treatments','استكشف العلاجات'),t('CARE FOR YOUR SKIN','العناية ببشرتك'),data.services[0]?.image||'/media/image42.png',()=>go('categories'))}{tile(t('Medical team','الفريق الطبي'),t('MEET YOUR SPECIALIST','تعرّف على طبيبك'),data.doctors[0]?.image||'/media/image44.png',()=>go('doctors'),'doctor')}{tile(t('About Us','من نحن'),t('GET TO KNOW US','تعرّف علينا'),'/media/image29.webp',()=>go('about'),'clinic')}{tile(t('Offers','عروض'),t('TREATMENT OPTIONS','خيارات العلاج'),data.packages[0]?.image||'/media/image27.webp',()=>go('packages'))}{tile(t('Find us','موقعنا'),t('CONTACT & LOCATION','التواصل والموقع'),'/media/image3.jpg',()=>go('contact'),'contact')}</nav></>;
  }else if(screen==='categories'){
   totalPages=Math.max(1,Math.ceil(cats.length/pageSize));body=<>{heading(t('EXPLORE YOUR CARE','استكشف رعايتك'),t('Our treatments','علاجاتنا'),t('Select an image to discover more.','اختر صورة لمعرفة المزيد.'))}<div className="collection">{cats.slice(page*pageSize,page*pageSize+pageSize).map(c=><div className="tile-holder" key={c.id}>{tile(field(c,'name'),field(c,'description'),c.image,()=>go('services',{categoryId:c.id}))}</div>)}</div></>;
  }else if(screen==='services'){
   body=<>{heading(t('OUR TREATMENTS','علاجاتنا'),field(cat,'name'))}{list(data.services.filter(s=>s.category===categoryId),'detail')}</>;
  }else if(screen==='doctors'||screen==='packages'){
-  body=<>{heading(t('OUR CLINIC','مركزنا'),screen==='doctors'?t('Medical team','الفريق الطبي'):t('Treatment packages','باقات العلاج'))}{list(screen==='doctors'?data.doctors:data.packages,screen==='doctors'?'doctor':'package')}</>;
+  body=<>{heading(t('OUR CLINIC','مركزنا'),screen==='doctors'?t('Medical team','الفريق الطبي'):t('Treatment Offers','عروض العلاج'))}{list(screen==='doctors'?data.doctors:data.packages,screen==='doctors'?'doctor':'package')}</>;
  }else if(screen==='detail'||screen==='doctor'||screen==='package'){
   const item=(screen==='detail'?data.services:screen==='doctor'?data.doctors:data.packages).find(i=>i.id===itemId);
   if(!item){body=<div className="empty-state"><h1>{t('Item unavailable','هذا العنصر غير متاح')}</h1>{action(t('Return home','العودة للرئيسية'),'home')}</div>}
@@ -210,10 +206,10 @@ export default function Visitor(){
    body=detail(item.image,<><div className="eyebrow">{screen==='detail'?field(cat,'name'):screen==='doctor'?t('YOUR MEDICAL TEAM','فريقك الطبي'):t('TREATMENT PACKAGE','باقة العلاج')}</div><h1>{field(item,'name')}</h1>{screen==='doctor'&&<p>{field(item,'qualification')}<br/>{field(item,'specialization')}</p>}<nav className="detail-tabs" aria-label={t('Information sections','أقسام المعلومات')}>{parts.map((part,index)=>parts.findIndex(p=>p.title===part.title)===index?<button key={part.title} aria-current={part.title===current.title?'page':undefined} onClick={()=>setPosition(p=>({...p,page:index}))}>{part.title}</button>:null)}</nav><h2>{current.title}</h2>{current.list?<ul className="benefits">{current.text.split('\n').filter(Boolean).map((line,i)=><li key={i}>{line}</li>)}</ul>:<p className="content-text">{current.text}</p>}{screen==='detail'&&<p className="fine">{t('Please speak with our clinical team for advice on suitability.','يرجى التحدث مع فريقنا الطبي لمعرفة مدى ملاءمة العلاج.')}</p>}</>);
   }
  }else if(screen==='about'){
-  const labels:Record<string,[string,string]>={overview:['Our clinic','مركزنا'],profile:['Our approach','نهجنا'],vision:['Vision','الرؤية'],mission:['Mission','الرسالة'],aim:['Our aim','هدفنا'],whyChoose:['Why choose us','لماذا تختارنا'],technology:['Technology','التقنيات'],patientCare:['Patient care','رعاية المرضى']};
+  const labels:Record<string,[string,string]>={overview:['About Us','ممن نحن'],profile:['Our approach','نهجنا'],vision:['Vision','الرؤية'],mission:['Mission','الرسالة'],aim:['Our aim','هدفنا'],whyChoose:['Why choose us','لماذا تختارنا'],technology:['Technology','التقنيات'],patientCare:['Patient care','رعاية المرضى']};
   const sections=Object.entries(labels).flatMap(([k,label])=>splitText(field(data.about,k)).map(text=>({title:t(...label),text})));
   totalPages=Math.max(1,sections.length);const part=sections[Math.min(page,sections.length-1)];
-  body=detail('/media/image29.webp',<><div className="eyebrow">{t('DR. ASHISH BHOLA · DOHA','د. أشيش بهولا · الدوحة')}</div><h1>{part?.title||t('Our clinic','مركزنا')}</h1><p className="content-text">{part?.text||t('Please speak to our team to learn more.','تحدث مع فريقنا لمعرفة المزيد.')}</p></>);
+  body=detail('/media/image29.webp',<><div className="eyebrow">{t('DR. ASHISH BHOLA · DOHA','د. أشيش بهولا · الدوحة')}</div><h1>{part?.title||t('About Us','من نحن')}</h1><p className="content-text">{part?.text||t('Please speak to our team to learn more.','تحدث مع فريقنا لمعرفة المزيد.')}</p></>);
  }else{
   const groups=[{title:t('Visit our clinic','زوروا مركزنا'),values:[field(data.contact,'address'),field(data.contact,'hours')]},{title:t('Speak to our team','تحدث مع فريقنا'),values:[field(data.contact,'telephone'),field(data.contact,'telephone2'),field(data.contact,'mobile'),field(data.contact,'email')]},{title:t('Online','عبر الإنترنت'),values:['instagram','facebook','tiktok','map'].map(k=>data.contact[k]).filter(Boolean)}].filter(g=>g.values.some(Boolean));
   const pages=groups.flatMap(g=>splitText(g.values.filter(Boolean).join('\n\n')).map(text=>({title:g.title,text})));
@@ -278,11 +274,11 @@ export default function Visitor(){
       </button>
 
       <button onClick={() => go('about')}>
-        {t('Our Clinic', 'مركزنا')}
+        {t('About Us', 'من نحن')}
       </button>
 
       <button onClick={() => go('packages')}>
-        {t('Packages', 'الباقات')}
+        {t('Offers', 'العروض')}
       </button>
 
       <button onClick={() => go('contact')}>
