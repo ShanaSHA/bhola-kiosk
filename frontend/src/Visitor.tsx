@@ -39,7 +39,7 @@ export default function Visitor(){
  useEffect(()=>{document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';return()=>{document.documentElement.dir='ltr'}},[lang]);
  useEffect(()=>{const q=matchMedia('(prefers-reduced-motion: reduce)');const update=()=>setReduced(q.matches);update();q.addEventListener('change',update);return()=>q.removeEventListener('change',update)},[]);
  const banners=data.banners.filter(b=>mediaUrl(b.image));
- const slides=[{id:'clinic',image:'/media/image3.jpg'},...(banners.length?banners:[{id:'care',image:'/media/image42.png'}])];
+ const slides=[{id:'clinic',image:'/media/image27.webp'},...(banners.length?banners:[{id:'care',image:'/media/image28.webp'}])];
  useEffect(()=>{if(paused||reduced||screen!=='home'||slides.length<2)return;const timer=setInterval(()=>{if(!document.hidden)setBanner(n=>(n+1)%slides.length)},8000);return()=>clearInterval(timer)},[paused,reduced,screen,slides.length]);
  useEffect(()=>{mainRef.current?.scrollTo(0,0)},[position,lang]);
  function go(next:Screen,extras:Partial<Position>={}){setHistory(h=>[...h,position]);setPosition({...position,screen:next,page:0,...extras})}
