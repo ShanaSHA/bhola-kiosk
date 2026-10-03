@@ -9,8 +9,23 @@ const start:Position={screen:'welcome',page:0,itemId:'',categoryId:''};
 const pageSize=3;
 function mediaUrl(value?:string){if(!value)return '';if(value.startsWith('/')&&!value.startsWith('//'))return value;try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?value:''}catch{return ''}}
 function splitText(value:string,size=420){const result:string[]=[];let rest=value.trim();while(rest.length>size){let at=rest.lastIndexOf(' ',size);if(at<1)at=size;result.push(rest.slice(0,at));rest=rest.slice(at).trim()}if(rest)result.push(rest);return result}
-function Photo({src,alt='',className=''}:{src?:string;alt?:string;className?:string}){return <img src={mediaUrl(src)||'/media/image3.jpg'} alt={alt} className={className} onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src='/media/image3.jpg'}}/>}
-
+function Photo({
+  src,
+  alt='',
+  className=''
+}:{
+  src?:string;
+  alt?:string;
+  className?:string
+}) {
+  return (
+    <img
+      src={mediaUrl(src)}
+      alt={alt}
+      className={className}
+    />
+  );
+}
 export default function Visitor(){
  const [data,setData]=useState<Content>(initialContent),[loaded,setLoaded]=useState(false),[error,setError]=useState('');
  const [position,setPosition]=useState<Position>(start),[history,setHistory]=useState<Position[]>([]),[lang,setLang]=useState<'en'|'ar'>('en');
@@ -198,7 +213,7 @@ export default function Visitor(){
   const labels:Record<string,[string,string]>={overview:['Our clinic','مركزنا'],profile:['Our approach','نهجنا'],vision:['Vision','الرؤية'],mission:['Mission','الرسالة'],aim:['Our aim','هدفنا'],whyChoose:['Why choose us','لماذا تختارنا'],technology:['Technology','التقنيات'],patientCare:['Patient care','رعاية المرضى']};
   const sections=Object.entries(labels).flatMap(([k,label])=>splitText(field(data.about,k)).map(text=>({title:t(...label),text})));
   totalPages=Math.max(1,sections.length);const part=sections[Math.min(page,sections.length-1)];
-  body=detail('/media/image3.jpg',<><div className="eyebrow">{t('DR. ASHISH BHOLA · DOHA','د. أشيش بهولا · الدوحة')}</div><h1>{part?.title||t('Our clinic','مركزنا')}</h1><p className="content-text">{part?.text||t('Please speak to our team to learn more.','تحدث مع فريقنا لمعرفة المزيد.')}</p></>);
+  body=detail('/media/image29.jpg',<><div className="eyebrow">{t('DR. ASHISH BHOLA · DOHA','د. أشيش بهولا · الدوحة')}</div><h1>{part?.title||t('Our clinic','مركزنا')}</h1><p className="content-text">{part?.text||t('Please speak to our team to learn more.','تحدث مع فريقنا لمعرفة المزيد.')}</p></>);
  }else{
   const groups=[{title:t('Visit our clinic','زوروا مركزنا'),values:[field(data.contact,'address'),field(data.contact,'hours')]},{title:t('Speak to our team','تحدث مع فريقنا'),values:[field(data.contact,'telephone'),field(data.contact,'telephone2'),field(data.contact,'mobile'),field(data.contact,'email')]},{title:t('Online','عبر الإنترنت'),values:['instagram','facebook','tiktok','map'].map(k=>data.contact[k]).filter(Boolean)}].filter(g=>g.values.some(Boolean));
   const pages=groups.flatMap(g=>splitText(g.values.filter(Boolean).join('\n\n')).map(text=>({title:g.title,text})));
