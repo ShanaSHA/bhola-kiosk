@@ -218,9 +218,8 @@
 .visitor-app .stage-language .welcome-logo {
     display: block !important;
 
-    width: min(320px, 40vw) !important;
-    max-width: 320px !important;
-
+   width: min(600px, 65vw) !important;
+max-width: 600px !important; 
     height: auto !important;
     min-height: 0 !important;
 
