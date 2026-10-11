@@ -29,7 +29,7 @@ function Photo({
 export default function Visitor(){
  const [data,setData]=useState<Content>(initialContent),[loaded,setLoaded]=useState(false),[error,setError]=useState('');
  const [position,setPosition]=useState<Position>(start),[history,setHistory]=useState<Position[]>([]),[lang,setLang]=useState<'en'|'ar'>('en');
- const [banner,setBanner]=useState(0),[paused,setPaused]=useState(false),[reduced,setReduced]=useState(false);
+const [banner,setBanner]=useState(0),[reduced,setReduced]=useState(false);
  const mainRef=useRef<HTMLElement>(null);
  const {screen,page,itemId,categoryId}=position;
  const t=(en:string,ar:string)=>lang==='ar'?ar:en;
@@ -40,7 +40,17 @@ export default function Visitor(){
  useEffect(()=>{const q=matchMedia('(prefers-reduced-motion: reduce)');const update=()=>setReduced(q.matches);update();q.addEventListener('change',update);return()=>q.removeEventListener('change',update)},[]);
  const banners=data.banners.filter(b=>mediaUrl(b.image));
  const slides=[{id:'clinic',image:'/media/image27.webp'},...(banners.length?banners:[{id:'care',image:'/media/image28.webp'}])];
- useEffect(()=>{if(paused||reduced||screen!=='home'||slides.length<2)return;const timer=setInterval(()=>{if(!document.hidden)setBanner(n=>(n+1)%slides.length)},8000);return()=>clearInterval(timer)},[paused,reduced,screen,slides.length]);
+ useEffect(()=>{
+  if(reduced||screen!=='home'||slides.length<2)return;
+
+  const timer=setInterval(()=>{
+    if(!document.hidden){
+      setBanner(n=>(n+1)%slides.length);
+    }
+  },8000);
+
+  return ()=>clearInterval(timer);
+},[reduced,screen,slides.length]);
  useEffect(()=>{mainRef.current?.scrollTo(0,0)},[position,lang]);
  function go(next:Screen,extras:Partial<Position>={}){setHistory(h=>[...h,position]);setPosition({...position,screen:next,page:0,...extras})}
  function back(){if(page>0){setPosition(p=>({...p,page:p.page-1}));return}const previous=history.at(-1);if(previous){setPosition(previous);setHistory(h=>h.slice(0,-1))}}
@@ -184,7 +194,7 @@ export default function Visitor(){
 }else if(error||!loaded){body=<div className="empty-state"><h1>{t('Welcome','مرحباً')}</h1><p role={error?'alert':undefined}>{error||t('Loading clinic information…','جارٍ تحميل معلومات المركز…')}</p>{error&&<button className="action" onClick={()=>void load()}>{t('Try again','حاول مرة أخرى')}</button>}</div>}
  else if(screen==='home'){
   const current=slides[banner%slides.length];
-  body=<><div className="banner"><div className="banner-copy"><div className="eyebrow">{t('WELCOME TO OUR CLINIC','مرحباً بكم في مركزنا')}</div><h1>{t('Your skin.','بشرتك.')}<br/>{t('Our expertise.','خبرتنا.')}</h1><p>{t('Touch a section to explore.','المس قسماً لاستكشافه.')}</p></div><div className="banner-photo"><Photo src={current.image} className="banner-image"/></div>{slides.length>1&&<div className="banner-controls"><button aria-label={t('Previous banner','الصورة السابقة')} onClick={()=>setBanner(n=>(n-1+slides.length)%slides.length)}>‹</button><button aria-label={paused?t('Play banner','تشغيل العرض'):t('Pause banner','إيقاف العرض')} onClick={()=>setPaused(v=>!v)}>{paused?'▶':'Ⅱ'}</button><button aria-label={t('Next banner','الصورة التالية')} onClick={()=>setBanner(n=>(n+1)%slides.length)}>›</button></div>}</div><nav className="tiles" aria-label={t('Clinic sections','أقسام المركز')}>{tile(t('Explore treatments','استكشف العلاجات'),t('CARE FOR YOUR SKIN','العناية ببشرتك'),data.services[0]?.image||'/media/image42.png',()=>go('categories'))}{tile(t('Medical team','الفريق الطبي'),t('MEET YOUR SPECIALIST','تعرّف على طبيبك'),data.doctors[0]?.image||'/media/image44.png',()=>go('doctors'),'doctor')}{tile(t('About Us','من نحن'),t('GET TO KNOW US','تعرّف علينا'),'/media/image29.webp',()=>go('about'),'clinic')}{tile(t('Offers','عروض'),t('TREATMENT OPTIONS','خيارات العلاج'),data.packages[0]?.image||'/media/image27.webp',()=>go('packages'))}{tile(t('Find us','موقعنا'),t('CONTACT & LOCATION','التواصل والموقع'),'/media/image3.jpg',()=>go('contact'),'contact')}</nav></>;
+  body=<><div className="banner"><div className="banner-copy"><div className="eyebrow">{t('WELCOME TO OUR CLINIC','مرحباً بكم في مركزنا')}</div><h1>{t('Your skin.','بشرتك.')}<br/>{t('Our expertise.','خبرتنا.')}</h1><p>{t('Touch a section to explore.','المس قسماً لاستكشافه.')}</p></div><div className="banner-photo"><Photo src={current.image} className="banner-image"/></div>{slides.length>1&&<div className="banner-controls"><button aria-label={t('Previous banner','الصورة السابقة')} onClick={()=>setBanner(n=>(n-1+slides.length)%slides.length)}>‹</button><button aria-label={t('Next banner','الصورة التالية')} onClick={()=>setBanner(n=>(n+1)%slides.length)}>›</button></div>}</div><nav className="tiles" aria-label={t('Clinic sections','أقسام المركز')}>{tile(t('Explore treatments','استكشف العلاجات'),t('CARE FOR YOUR SKIN','العناية ببشرتك'),data.services[0]?.image||'/media/image42.png',()=>go('categories'))}{tile(t('Medical team','الفريق الطبي'),t('MEET YOUR SPECIALIST','تعرّف على طبيبك'),data.doctors[0]?.image||'/media/image44.png',()=>go('doctors'),'doctor')}{tile(t('About Us','من نحن'),t('GET TO KNOW US','تعرّف علينا'),'/media/image29.webp',()=>go('about'),'clinic')}{tile(t('Offers','عروض'),t('TREATMENT OPTIONS','خيارات العلاج'),data.packages[0]?.image||'/media/image27.webp',()=>go('packages'))}{tile(t('Find us','موقعنا'),t('CONTACT & LOCATION','التواصل والموقع'),'/media/image3.jpg',()=>go('contact'),'contact')}</nav></>;
  }else if(screen==='categories'){
   totalPages=Math.max(1,Math.ceil(cats.length/pageSize));body=<>{heading(t('EXPLORE YOUR CARE','استكشف رعايتك'),t('Our treatments','علاجاتنا'),t('Select an image to discover more.','اختر صورة لمعرفة المزيد.'))}<div className="collection">{cats.slice(page*pageSize,page*pageSize+pageSize).map(c=><div className="tile-holder" key={c.id}>{tile(field(c,'name'),field(c,'description'),c.image,()=>go('services',{categoryId:c.id}))}</div>)}</div></>;
  }else if(screen==='services'){
@@ -222,21 +232,28 @@ export default function Visitor(){
     <div className="device">
 
       {!['welcome', 'language'].includes(screen) && (
-        <header className="header">
-          <div className="brand-ribbon">
-            <Photo
-              src="/media/dr-ashish-bhola-logo.jpg"
-              alt="Dr. Ashish Bhola Dermatology Center"
-            />
-          </div>
+        
 
-          <button
-            className="language"
-            onClick={() => go('language')}
-          >
-            English / العربية
-          </button>
-        </header>
+<header className="header">
+  <div className="brand-ribbon">
+    <img
+      src="/media/logo.png"
+      alt="Dr. Ashish Bhola Dermatology Center"
+      className="brand-logo"
+    />
+  </div>
+
+  <div className="header-right">
+    <button
+      className="language"
+      onClick={() => go("language")}
+    >
+      
+      <span>English / العربية</span>
+    </button>
+  </div>
+</header>
+
       )}
 
       <main
