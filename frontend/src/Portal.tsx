@@ -11,7 +11,7 @@ import {initialContent,Content,Item} from '@/lib/content';
 
 type Lang='en'|'ar';
 const nav=[['home','Home',Home],['about','About us',Info],['services','Treatments',Sparkles],['doctors','Our doctor',UserRound],['packages','Packages',Layers],['contact','Clinic info',MapPin]] as const;
-const groupFields:Record<string,string[]>={categories:['name','description','image','order'],services:['name','category','image','description','benefits','related'],doctors:['name','image','qualification','specialization','experience','description','expertise'],packages:['name','image','description','included','price','highlights'],banners:['name','image']};
+const groupFields:Record<string,string[]>={categories:['name','description','image','order'],services:['name','category','image','description','benefits','price','related'],doctors:['name','image','qualification','specialization','experience','description','expertise'],packages:['name','image','description','included','price','highlights'],banners:['name','image']};
 const label=(s:string)=>s.replace(/([A-Z])/g,' $1').replace(/^./,x=>x.toUpperCase());
 const safe=(url:string)=>url.startsWith('/')&&!url.startsWith('//')||/^https:\/\//.test(url)?url:'';
 const arKey=(key:string)=>`${key}_ar`;
