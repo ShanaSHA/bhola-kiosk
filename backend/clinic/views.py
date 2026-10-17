@@ -15,18 +15,35 @@ from django.views.decorators.http import require_http_methods, require_GET, requ
 from django.views.decorators.cache import never_cache
 from .models import ClinicContent, LoginAttempt
 from .validation import validate_content
-
-def csrf_failure(request, reason=''): return JsonResponse({'error':'Your session could not be verified. Reload and try again.'},status=403)
+from django.views.decorators.csrf import ensure_csrf_cookie
+def csrf_failure(request, reason=''):
+    print("CSRF FAILURE:", reason)
+    return JsonResponse(
+        {'error': 'Your session could not be verified. Reload and try again.'},
+        status=403
+    )
 def staff(request): return request.user.is_authenticated and request.user.is_active and request.user.is_staff
 def denied(): return JsonResponse({'error':'Staff sign-in required.'},status=403)
+
 def parse(request):
-    if len(request.body)>500000: raise ValueError('Request is too large.')
-    value=json.loads(request.body)
-    if not isinstance(value,dict): raise ValueError('Expected a JSON object.')
+    if len(request.body) > 500000:
+        raise ValueError('Request is too large.')
+
+    value = json.loads(request.body)
+
+    if not isinstance(value, dict):
+        raise ValueError('Expected a JSON object.')
+
     return value
+
 @require_GET
 @never_cache
-def session(request): return JsonResponse({'isStaff':bool(staff(request)),'csrfToken':get_token(request)})
+@ensure_csrf_cookie
+def session(request):
+    return JsonResponse({
+        'isStaff': bool(staff(request)),
+        'csrfToken': get_token(request),
+    })
 @require_POST
 @never_cache
 def sign_in(request):

@@ -62,7 +62,15 @@ const [banner,setBanner]=useState(0),[reduced,setReduced]=useState(false);
  function heading(ey:string,title:string,sub=''){return <div className="section-head"><div><div className="eyebrow">{ey}</div><h1>{title}</h1></div>{sub&&<p>{sub}</p>}</div>}
  function action(label:string,next:Screen){return <button className="action" onClick={()=>go(next)}>{label}<span aria-hidden="true">{t('→','←')}</span></button>}
  function detail(src:string|undefined,body:ReactNode){return <div className="detail"><figure className="detail-photo"><Photo src={src}/></figure><section className="detail-copy">{body}</section></div>}
- function list(items:Item[],next:Screen){totalPages=Math.max(1,Math.ceil(items.length/pageSize));return items.length?<div className="collection">{items.slice(page*pageSize,page*pageSize+pageSize).map(i=><div className="tile-holder" key={i.id}>{tile(field(i,'name'),t('VIEW DETAILS','عرض التفاصيل'),i.image,()=>go(next,{itemId:i.id}))}</div>)}</div>:<div className="empty-state"><h2>{t('Speak with our reception team','تحدث مع فريق الاستقبال')}</h2><p>{t('Please contact reception for information and current availability.','يرجى التواصل مع الاستقبال للحصول على المعلومات والتفاصيل الحالية.')}</p>{action(t('Contact our clinic','تواصل مع المركز'),'contact')}</div>}
+ function list(items:Item[],next:Screen){totalPages=Math.max(1,Math.ceil(items.length/pageSize));return items.length?<div className="collection">{items.slice(page*pageSize,page*pageSize+pageSize).map(i=><div className="tile-holder" key={i.id}>{
+ tile(
+  field(i,'name'),
+  i.price
+    ? `${t('QAR','ر.ق')} ${field(i,'price')}`
+    : t('VIEW DETAILS','عرض التفاصيل'),
+  i.image,
+  () => go(next,{itemId:i.id})
+)}</div>)}</div>:<div className="empty-state"><h2>{t('Speak with our reception team','تحدث مع فريق الاستقبال')}</h2><p>{t('Please contact reception for information and current availability.','يرجى التواصل مع الاستقبال للحصول على المعلومات والتفاصيل الحالية.')}</p>{action(t('Contact our clinic','تواصل مع المركز'),'contact')}</div>}
  let body:ReactNode;
  if(screen==='welcome'||screen==='language'){
   const language=screen==='language';
@@ -208,7 +216,13 @@ const [banner,setBanner]=useState(0),[reduced,setReduced]=useState(false);
    const parts:{title:string;text:string;list?:boolean}[]=[];
    const add=(title:string,value:string,isList=false)=>{splitText(value).forEach(v=>parts.push({title,text:v,list:isList}))};
    add(t('Overview','نظرة عامة'),field(item,'description'));
-   if(screen==='detail'){add(t('Benefits','الفوائد'),field(item,'benefits'),true);add(t('Related care','علاجات ذات صلة'),field(item,'related'))}
+   if(screen==='detail'){
+  if(field(item,'price')){
+    add(t('Price','السعر'),`${t('QAR','ر.ق')} ${field(item,'price')}`);
+  }
+  add(t('Benefits','الفوائد'),field(item,'benefits'),true);
+  add(t('Related care','علاجات ذات صلة'),field(item,'related'));
+}
    if(screen==='doctor'){add(t('Experience','الخبرة'),field(item,'experience')?`${field(item,'experience')} ${t('years of experience','سنوات من الخبرة')}`:'');add(t('Expertise','الخبرات'),field(item,'expertise'),true)}
    if(screen==='package'){add(t('Price','السعر'),field(item,'price'));add(t('Included','تشمل الباقة'),field(item,'included'),true);add(t('Highlights','مميزات الباقة'),field(item,'highlights'),true)}
    if(!parts.length)parts.push({title:t('Information','معلومات'),text:t('Please contact reception for details.','يرجى التواصل مع الاستقبال للحصول على التفاصيل.')});
