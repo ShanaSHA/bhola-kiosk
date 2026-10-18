@@ -63,16 +63,39 @@ const [banner,setBanner]=useState(0),[reduced,setReduced]=useState(false);
  function heading(ey:string,title:string,sub=''){return <div className="section-head"><div><div className="eyebrow">{ey}</div><h1>{title}</h1></div>{sub&&<p>{sub}</p>}</div>}
  function action(label:string,next:Screen){return <button className="action" onClick={()=>go(next)}>{label}<span aria-hidden="true">{t('→','←')}</span></button>}
  function detail(src:string|undefined,body:ReactNode){return <div className="detail"><figure className="detail-photo"><Photo src={src}/></figure><section className="detail-copy">{body}</section></div>}
- function list(items:Item[],next:Screen){totalPages=Math.max(1,Math.ceil(items.length/pageSize));return items.length?<div className="collection">{items.slice(page*pageSize,page*pageSize+pageSize).map(i=><div className="tile-holder" key={i.id}>{
- tile(
-  field(i,'name'),
-  i.price
-    ? `${t('QAR','ر.ق')} ${field(i,'price')}`
-    : t('VIEW DETAILS','عرض التفاصيل'),
-  i.image,
-  () => go(next,{itemId:i.id})
-)}</div>)}</div>:<div className="empty-state"><h2>{t('Speak with our reception team','تحدث مع فريق الاستقبال')}</h2><p>{t('Please contact reception for information and current availability.','يرجى التواصل مع الاستقبال للحصول على المعلومات والتفاصيل الحالية.')}</p>{action(t('Contact our clinic','تواصل مع المركز'),'contact')}</div>}
- let body:ReactNode;
+ function list(items: Item[], next: Screen) {
+  totalPages = 1;
+
+  return items.length ? (
+    <div className="collection">
+      {items.map(i => (
+        <div className="tile-holder" key={i.id}>
+          {tile(
+            field(i, 'name'),
+            i.price
+              ? `${t('QAR', 'ر.ق')} ${field(i, 'price')}`
+              : t('VIEW DETAILS', 'عرض التفاصيل'),
+            i.image,
+            () => go(next, { itemId: i.id })
+          )}
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className="empty-state">
+      <h2>{t('Speak with our reception team', 'تحدث مع فريق الاستقبال')}</h2>
+      <p>
+        {t(
+          'Please contact reception for information and current availability.',
+          'يرجى التواصل مع الاستقبال للحصول على المعلومات والتفاصيل الحالية.'
+        )}
+      </p>
+      {action(t('Contact our clinic', 'تواصل مع المركز'), 'contact')}
+    </div>
+  );
+}
+
+let body: ReactNode;
  if(screen==='welcome'||screen==='language'){
   const language=screen==='language';
 
