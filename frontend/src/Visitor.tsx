@@ -176,7 +176,7 @@ let body: ReactNode;
           <div className="welcome-content language-selection">
 
            <img
-  src="/media/dr_ashish_bhola_logo_website_transparent.png"
+  src="/media/logo_glossy_transparent.png"
   className="welcome-logo"
   alt="Dr. Ashish Bhola Dermatology Center"
 />
