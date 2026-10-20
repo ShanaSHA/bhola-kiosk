@@ -1737,6 +1737,95 @@ max-width: 600px !important;
         width: 70% !important;
         height: 88px !important;               }
 }
+/* =========================================================
+   HEADER RESPONSIVE ADD-ON
+   Your current header design is NOT changed (same colors, glow,
+   logo, button style). Nothing is deleted.
+   Paste at the VERY END of your CSS.
+   It only makes sizes scale with the screen and stops the
+   logo from overlapping the language button.
+   ========================================================= */
+
+/* ---------- Desktop / large tablet / portrait kiosk ---------- */
+.visitor-app .device .header {
+    --hh: clamp(84px, 11cqw, 150px);                  /* header height */
+    --side: clamp(150px, 21cqw, 270px);               /* space kept free for the button */
+
+    height: var(--hh) !important;
+    min-height: var(--hh) !important;
+    padding: 0 clamp(10px, 2.2cqw, 28px) !important;
+}
+
+.visitor-app .device .header .brand-ribbon {
+    width: min(860px, calc(100% - 2 * var(--side))) !important;
+    height: calc(var(--hh) - 12px) !important;
+}
+
+.visitor-app .device .header .language {
+    min-height: clamp(36px, 4.6cqw, 54px) !important;
+    padding: 0 clamp(12px, 1.8cqw, 26px) !important;
+    font-size: clamp(11px, 1.5cqw, 16px) !important;
+}
+
+/* ---------- Phones and small tablets: logo left, button right ---------- */
+@container (max-width: 720px) {
+    .visitor-app .device .header {
+        --hh: clamp(76px, 19cqw, 100px);
+        padding: 0 10px !important;
+
+        /* move the glow so it stays behind the logo (same colors as now) */
+        background:
+            radial-gradient(
+                ellipse 62% 135% at 36% 52%,
+                #fffafb 0%,
+                #ffe9f0 24%,
+                rgba(255, 190, 210, 0.9) 42%,
+                rgba(226, 104, 140, 0.55) 60%,
+                rgba(112, 25, 52, 0.18) 78%,
+                transparent 100%
+            ),
+            linear-gradient(
+                110deg,
+                #050507 0%,
+                #180811 28%,
+                #350e1c 50%,
+                #180811 72%,
+                #050507 100%
+            ) !important;
+    }
+
+    .visitor-app .device .header .brand-ribbon {
+        inset: 0 auto 0 8px !important;
+        margin: auto 0 !important;
+        width: calc(100% - 140px) !important;
+        max-width: 380px !important;
+        height: calc(var(--hh) - 14px) !important;
+    }
+
+    .visitor-app .device .header .brand-ribbon img,
+    .visitor-app .device .header .brand-ribbon .brand-logo {
+        transform: none !important;
+    }
+
+    .visitor-app .device .header .language {
+        min-height: 34px !important;
+        padding: 0 10px !important;
+        font-size: clamp(10px, 2.7cqw, 13px) !important;
+    }
+}
+
+/* ---------- Very small phones ---------- */
+@container (max-width: 380px) {
+    .visitor-app .device .header .brand-ribbon {
+        width: calc(100% - 120px) !important;
+    }
+
+    .visitor-app .device .header .language {
+        min-height: 30px !important;
+        padding: 0 7px !important;
+        font-size: 9.5px !important;
+    }
+}
 /* ===========================================
    REFERENCE-MATCH LANGUAGE SCREEN
    Dark luxury + rose-gold glass
