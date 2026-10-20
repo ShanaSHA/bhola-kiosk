@@ -55,6 +55,7 @@ const [banner,setBanner]=useState(0),[reduced,setReduced]=useState(false);
  function go(next:Screen,extras:Partial<Position>={}){setHistory(h=>[...h,position]);setPosition({...position,screen:next,page:0,...extras})}
  function back(){if(page>0){setPosition(p=>({...p,page:p.page-1}));return}const previous=history.at(-1);if(previous){setPosition(previous);setHistory(h=>h.slice(0,-1))}}
  const cats=[...data.categories].sort((a,b)=>Number(a.order||0)-Number(b.order||0));
+ console.log('Categories received:', cats.length, cats.map(c => c.name));
  const cat=data.categories.find(c=>c.id===categoryId);
  let totalPages=1,status='';
  const arrow=<span className="circle-arrow" aria-hidden="true">{t('↗','↖')}</span>;
@@ -62,8 +63,39 @@ const [banner,setBanner]=useState(0),[reduced,setReduced]=useState(false);
  function heading(ey:string,title:string,sub=''){return <div className="section-head"><div><div className="eyebrow">{ey}</div><h1>{title}</h1></div>{sub&&<p>{sub}</p>}</div>}
  function action(label:string,next:Screen){return <button className="action" onClick={()=>go(next)}>{label}<span aria-hidden="true">{t('→','←')}</span></button>}
  function detail(src:string|undefined,body:ReactNode){return <div className="detail"><figure className="detail-photo"><Photo src={src}/></figure><section className="detail-copy">{body}</section></div>}
- function list(items:Item[],next:Screen){totalPages=Math.max(1,Math.ceil(items.length/pageSize));return items.length?<div className="collection">{items.slice(page*pageSize,page*pageSize+pageSize).map(i=><div className="tile-holder" key={i.id}>{tile(field(i,'name'),t('VIEW DETAILS','عرض التفاصيل'),i.image,()=>go(next,{itemId:i.id}))}</div>)}</div>:<div className="empty-state"><h2>{t('Speak with our reception team','تحدث مع فريق الاستقبال')}</h2><p>{t('Please contact reception for information and current availability.','يرجى التواصل مع الاستقبال للحصول على المعلومات والتفاصيل الحالية.')}</p>{action(t('Contact our clinic','تواصل مع المركز'),'contact')}</div>}
- let body:ReactNode;
+ function list(items: Item[], next: Screen) {
+  totalPages = 1;
+
+  return items.length ? (
+    <div className="collection">
+      {items.map(i => (
+        <div className="tile-holder" key={i.id}>
+          {tile(
+            field(i, 'name'),
+            i.price
+              ? `${t('QAR', 'ر.ق')} ${field(i, 'price')}`
+              : t('VIEW DETAILS', 'عرض التفاصيل'),
+            i.image,
+            () => go(next, { itemId: i.id })
+          )}
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className="empty-state">
+      <h2>{t('Speak with our reception team', 'تحدث مع فريق الاستقبال')}</h2>
+      <p>
+        {t(
+          'Please contact reception for information and current availability.',
+          'يرجى التواصل مع الاستقبال للحصول على المعلومات والتفاصيل الحالية.'
+        )}
+      </p>
+      {action(t('Contact our clinic', 'تواصل مع المركز'), 'contact')}
+    </div>
+  );
+}
+
+let body: ReactNode;
  if(screen==='welcome'||screen==='language'){
   const language=screen==='language';
 
@@ -195,8 +227,31 @@ const [banner,setBanner]=useState(0),[reduced,setReduced]=useState(false);
  else if(screen==='home'){
   const current=slides[banner%slides.length];
   body=<><div className="banner"><div className="banner-copy"><div className="eyebrow">{t('WELCOME TO OUR CLINIC','مرحباً بكم في مركزنا')}</div><h1>{t('Your skin.','بشرتك.')}<br/>{t('Our expertise.','خبرتنا.')}</h1><p>{t('Touch a section to explore.','المس قسماً لاستكشافه.')}</p></div><div className="banner-photo"><Photo src={current.image} className="banner-image"/></div>{slides.length>1&&<div className="banner-controls"><button aria-label={t('Previous banner','الصورة السابقة')} onClick={()=>setBanner(n=>(n-1+slides.length)%slides.length)}>‹</button><button aria-label={t('Next banner','الصورة التالية')} onClick={()=>setBanner(n=>(n+1)%slides.length)}>›</button></div>}</div><nav className="tiles" aria-label={t('Clinic sections','أقسام المركز')}>{tile(t('Explore treatments','استكشف العلاجات'),t('CARE FOR YOUR SKIN','العناية ببشرتك'),data.services[0]?.image||'/media/image42.png',()=>go('categories'))}{tile(t('Medical team','الفريق الطبي'),t('MEET YOUR SPECIALIST','تعرّف على طبيبك'),data.doctors[0]?.image||'/media/image44.png',()=>go('doctors'),'doctor')}{tile(t('About Us','من نحن'),t('GET TO KNOW US','تعرّف علينا'),'/media/image29.webp',()=>go('about'),'clinic')}{tile(t('Offers','عروض'),t('TREATMENT OPTIONS','خيارات العلاج'),data.packages[0]?.image||'/media/image27.webp',()=>go('packages'))}{tile(t('Find us','موقعنا'),t('CONTACT & LOCATION','التواصل والموقع'),'/media/image3.jpg',()=>go('contact'),'contact')}</nav></>;
- }else if(screen==='categories'){
-  totalPages=Math.max(1,Math.ceil(cats.length/pageSize));body=<>{heading(t('EXPLORE YOUR CARE','استكشف رعايتك'),t('Our treatments','علاجاتنا'),t('Select an image to discover more.','اختر صورة لمعرفة المزيد.'))}<div className="collection">{cats.slice(page*pageSize,page*pageSize+pageSize).map(c=><div className="tile-holder" key={c.id}>{tile(field(c,'name'),field(c,'description'),c.image,()=>go('services',{categoryId:c.id}))}</div>)}</div></>;
+ 
+}else if(screen==='categories'){
+  totalPages=1;
+  body=(
+    <>
+      {heading(
+        t('EXPLORE YOUR CARE','استكشف رعايتك'),
+        t('Our treatments','علاجاتنا'),
+        t('Select an image to discover more.','اختر صورة لمعرفة المزيد.')
+      )}
+      <div className="collection">
+        {cats.map(c=>(
+          <div className="tile-holder" key={c.id}>
+            {tile(
+              field(c,'name'),
+              field(c,'description'),
+              c.image,
+              ()=>go('services',{categoryId:c.id})
+            )}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+
  }else if(screen==='services'){
   body=<>{heading(t('OUR TREATMENTS','علاجاتنا'),field(cat,'name'))}{list(data.services.filter(s=>s.category===categoryId),'detail')}</>;
  }else if(screen==='doctors'||screen==='packages'){
@@ -208,7 +263,13 @@ const [banner,setBanner]=useState(0),[reduced,setReduced]=useState(false);
    const parts:{title:string;text:string;list?:boolean}[]=[];
    const add=(title:string,value:string,isList=false)=>{splitText(value).forEach(v=>parts.push({title,text:v,list:isList}))};
    add(t('Overview','نظرة عامة'),field(item,'description'));
-   if(screen==='detail'){add(t('Benefits','الفوائد'),field(item,'benefits'),true);add(t('Related care','علاجات ذات صلة'),field(item,'related'))}
+   if(screen==='detail'){
+  if(field(item,'price')){
+    add(t('Price','السعر'),`${t('QAR','ر.ق')} ${field(item,'price')}`);
+  }
+  add(t('Benefits','الفوائد'),field(item,'benefits'),true);
+  add(t('Related care','علاجات ذات صلة'),field(item,'related'));
+}
    if(screen==='doctor'){add(t('Experience','الخبرة'),field(item,'experience')?`${field(item,'experience')} ${t('years of experience','سنوات من الخبرة')}`:'');add(t('Expertise','الخبرات'),field(item,'expertise'),true)}
    if(screen==='package'){add(t('Price','السعر'),field(item,'price'));add(t('Included','تشمل الباقة'),field(item,'included'),true);add(t('Highlights','مميزات الباقة'),field(item,'highlights'),true)}
    if(!parts.length)parts.push({title:t('Information','معلومات'),text:t('Please contact reception for details.','يرجى التواصل مع الاستقبال للحصول على التفاصيل.')});
