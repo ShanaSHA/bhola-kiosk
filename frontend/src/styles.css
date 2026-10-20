@@ -178,3 +178,94 @@
   .language-switch{order:3}
   .header-right .outline-button,.header-right .header-signout{font-size:11px;padding:9px 10px}
 }
+/* =========================================================
+   ADMIN HEADER: RESPONSIVE
+   Paste at the VERY END of the same CSS file (after the last }).
+   Everything is scoped to .admin-app, so the kiosk header
+   is not affected.
+
+   Admin header contents (from your Portal component):
+   [logo + name]  [EN / ع]  [CONTENT MANAGEMENT]  [Open kiosk]  [Sign out]
+   ========================================================= */
+
+/* ---------- Laptops / small desktops: stop the row from overflowing ---------- */
+@media (max-width: 1200px) {
+    .admin-app .header-right {
+        gap: 14px;
+    }
+
+    .admin-app .header-right .location {   /* the "CONTENT MANAGEMENT" label */
+        display: none;
+    }
+}
+
+/* ---------- Tablets: logo and buttons share one row when they fit ---------- */
+@media (min-width: 701px) and (max-width: 900px) {
+    .admin-app .topbar .brand {
+        flex: 1 1 auto;
+    }
+
+    .admin-app .header-right {
+        flex: 0 1 auto;
+        justify-content: flex-end;
+    }
+}
+
+/* ---------- Phones: tidy two-row layout ----------
+   Row 1: logo (left)      EN / ع (right)
+   Row 2: Open kiosk       Sign out   (two equal buttons)           */
+@media (max-width: 700px) {
+    .admin-app .topbar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 10px;
+        height: auto;
+        min-height: 0;
+        padding: 10px 4% 12px;
+    }
+
+    .admin-app .header-right {
+        display: contents;                 /* its children join the grid above */
+    }
+
+    .admin-app .topbar .brand {
+        grid-column: 1;
+        flex: none;
+    }
+
+    .admin-app .language-switch {
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .admin-app .header-right .outline-button,
+    .admin-app .header-right .header-signout {
+        width: 100%;
+        min-height: 44px;                  /* comfortable touch target */
+        justify-content: center;
+        padding: 9px 10px;
+        font-size: 12px;
+        gap: 6px;
+        white-space: nowrap;
+    }
+}
+
+/* ---------- Very small phones ---------- */
+@media (max-width: 380px) {
+    .admin-app .topbar {
+        gap: 8px;
+        padding: 8px 3% 10px;
+    }
+
+    .admin-app .header-right .outline-button,
+    .admin-app .header-right .header-signout {
+        font-size: 11px;
+        padding: 8px 6px;
+    }
+
+    .admin-app .language-switch {
+        padding: 5px 7px;
+        gap: 5px;
+    }
+}
