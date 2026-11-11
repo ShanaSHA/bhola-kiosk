@@ -35,6 +35,131 @@
   .header-right .location,.header-right .clinic-mark{display:none}
   .header-right .outline-button,.header-right .header-signout{min-height:42px}
 }
+/* =========================================================
+   LOGIN PAGE: MOBILE RULES
+   Paste at the VERY END of your CSS file (after the .login-* rules).
+   Desktop look is unchanged.
+   ========================================================= */
+
+/* All sizes: the form had an inline width (min(420px,90vw)) that could
+   overflow the card on phones, so force it to fit the card. */
+.login-card form {
+    width: 100% !important;
+    max-width: 420px;
+    margin-inline: auto;
+}
+
+/* Language toggle: flips to the left automatically in Arabic */
+.login-tools {
+    right: auto;
+    inset-inline-end: 18px;
+}
+
+/* ---------- Phones and small tablets ---------- */
+@media (max-width: 640px) {
+    .login-page {
+        min-height: 100dvh;
+        padding: 16px 12px;
+    }
+
+    .login-card {
+        width: 100%;
+        padding: 60px 20px 28px;          /* top space keeps text clear of EN / ع */
+        box-shadow: 0 12px 36px rgba(45, 8, 22, 0.08);
+    }
+
+    .login-tools {
+        top: 10px;
+        inset-inline-end: 10px;
+    }
+
+    .login-tools button {
+        min-width: 44px;                  /* comfortable touch target */
+        min-height: 44px;
+        font-size: 15px;
+    }
+
+    .login-logo {
+        width: min(200px, 60vw);
+        height: auto;
+        max-height: 100px;
+        margin-bottom: 12px;
+    }
+
+    .login-card .eyebrow {
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        line-height: 1.6;
+    }
+
+    .login-page .login-card h1 {
+        font-size: 32px;
+        line-height: 1.15;
+        margin-top: 8px;
+    }
+
+    .login-card .edit-grid {
+        gap: 16px;
+        margin: 18px 0;
+    }
+
+    .login-card .edit-grid input {
+        min-height: 50px;
+        font-size: 16px;                  /* 16px stops iOS from zooming on focus */
+    }
+
+    .login-card .gold-button {
+        min-height: 54px;
+    }
+
+    .login-card a {
+        display: inline-block;
+        padding: 14px 10px;
+        margin-top: 6px;
+    }
+}
+
+/* ---------- Very small phones ---------- */
+@media (max-width: 380px) {
+    .login-card {
+        padding: 56px 16px 24px;
+    }
+
+    .login-logo {
+        width: min(160px, 55vw);
+        max-height: 80px;
+    }
+
+    .login-page .login-card h1 {
+        font-size: 28px;
+    }
+}
+
+/* ---------- Phones held sideways (short screens) ---------- */
+@media (max-height: 520px) and (orientation: landscape) {
+    .login-page {
+        padding: 10px 12px;
+    }
+
+    .login-card {
+        padding: 44px 24px 18px;
+    }
+
+    .login-logo {
+        height: 60px;
+        max-height: 60px;
+        margin-bottom: 6px;
+    }
+
+    .login-page .login-card h1 {
+        font-size: 26px;
+    }
+
+    .login-card .edit-grid {
+        margin: 12px 0;
+        gap: 10px;
+    }
+}
 @media(max-width:640px){
   .welcome-content{width:min(94vw,520px);padding:20px 12px}
   .welcome-logo{width:min(260px,70vw);max-height:150px;margin-bottom:16px}
@@ -52,4 +177,95 @@
   .brand small{font-size:7px}
   .language-switch{order:3}
   .header-right .outline-button,.header-right .header-signout{font-size:11px;padding:9px 10px}
+}
+/* =========================================================
+   ADMIN HEADER: RESPONSIVE
+   Paste at the VERY END of the same CSS file (after the last }).
+   Everything is scoped to .admin-app, so the kiosk header
+   is not affected.
+
+   Admin header contents (from your Portal component):
+   [logo + name]  [EN / ع]  [CONTENT MANAGEMENT]  [Open kiosk]  [Sign out]
+   ========================================================= */
+
+/* ---------- Laptops / small desktops: stop the row from overflowing ---------- */
+@media (max-width: 1200px) {
+    .admin-app .header-right {
+        gap: 14px;
+    }
+
+    .admin-app .header-right .location {   /* the "CONTENT MANAGEMENT" label */
+        display: none;
+    }
+}
+
+/* ---------- Tablets: logo and buttons share one row when they fit ---------- */
+@media (min-width: 701px) and (max-width: 900px) {
+    .admin-app .topbar .brand {
+        flex: 1 1 auto;
+    }
+
+    .admin-app .header-right {
+        flex: 0 1 auto;
+        justify-content: flex-end;
+    }
+}
+
+/* ---------- Phones: tidy two-row layout ----------
+   Row 1: logo (left)      EN / ع (right)
+   Row 2: Open kiosk       Sign out   (two equal buttons)           */
+@media (max-width: 700px) {
+    .admin-app .topbar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 10px;
+        height: auto;
+        min-height: 0;
+        padding: 10px 4% 12px;
+    }
+
+    .admin-app .header-right {
+        display: contents;                 /* its children join the grid above */
+    }
+
+    .admin-app .topbar .brand {
+        grid-column: 1;
+        flex: none;
+    }
+
+    .admin-app .language-switch {
+        grid-column: 2;
+        justify-self: end;
+    }
+
+    .admin-app .header-right .outline-button,
+    .admin-app .header-right .header-signout {
+        width: 100%;
+        min-height: 44px;                  /* comfortable touch target */
+        justify-content: center;
+        padding: 9px 10px;
+        font-size: 12px;
+        gap: 6px;
+        white-space: nowrap;
+    }
+}
+
+/* ---------- Very small phones ---------- */
+@media (max-width: 380px) {
+    .admin-app .topbar {
+        gap: 8px;
+        padding: 8px 3% 10px;
+    }
+
+    .admin-app .header-right .outline-button,
+    .admin-app .header-right .header-signout {
+        font-size: 11px;
+        padding: 8px 6px;
+    }
+
+    .admin-app .language-switch {
+        padding: 5px 7px;
+        gap: 5px;
+    }
 }
