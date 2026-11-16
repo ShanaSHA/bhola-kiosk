@@ -261,7 +261,15 @@ let body: ReactNode;
   if(!item){body=<div className="empty-state"><h1>{t('Item unavailable','هذا العنصر غير متاح')}</h1>{action(t('Return home','العودة للرئيسية'),'home')}</div>}
   else{
    const parts:{title:string;text:string;list?:boolean}[]=[];
-   const add=(title:string,value:string,isList=false)=>{splitText(value).forEach(v=>parts.push({title,text:v,list:isList}))};
+   const add = (title: string, value: string, isList = false) => {
+  if (value && value.trim()) {
+    parts.push({
+      title,
+      text: value.trim(),
+      list: isList
+    });
+  }
+};
    add(t('Overview','نظرة عامة'),field(item,'description'));
    if(screen==='detail'){
   if(field(item,'price')){
