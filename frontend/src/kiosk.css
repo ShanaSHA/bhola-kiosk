@@ -2113,3 +2113,34 @@ max-width: 600px !important;
     background: #8a1538;
     border-radius: 6px;
 }
+
+/* ==========================================
+   TREATMENT IMAGES — SHOW FULL IMAGE
+   Prevent top and bottom cropping
+   ========================================== */
+
+.visitor-app .collection .tile img {
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: contain !important;
+    object-position: center center !important;
+
+    background: #1c1418;
+}
+
+/* Prevent zoom cropping on hover */
+.visitor-app .collection .tile:hover img {
+    transform: none !important;
+}
+
+/* Treatment detail image */
+.visitor-app .detail-photo img {
+    object-fit: contain !important;
+    object-position: center center !important;
+    background: #1c1418;
+}
+/* DISCOVER YOUR CARE — LOGO RED */
+.visitor-app .stage-welcome .welcome-content h1 span {
+    color: #B12339 !important;
+}
