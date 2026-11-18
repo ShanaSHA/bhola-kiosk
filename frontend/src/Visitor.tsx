@@ -138,7 +138,7 @@ let body: ReactNode;
           <div className="welcome-content welcome-video-prompt">
 
            <img
-  src="/media/dr_ashish_bhola_logo_website_transparent.png"
+  src="/media/dr_ashish_bhola_logo_glossy.png"
   className="welcome-logo"
   alt="Dr. Ashish Bhola Dermatology Center"
 />
@@ -176,7 +176,7 @@ let body: ReactNode;
           <div className="welcome-content language-selection">
 
            <img
-  src="/media/logo_glossy_transparent.png"
+  src="/media/dr_ashish_bhola_logo_glossy.png"
   className="welcome-logo"
   alt="Dr. Ashish Bhola Dermatology Center"
 />
@@ -306,7 +306,7 @@ let body: ReactNode;
 <header className="header">
   <div className="brand-ribbon">
     <img
-      src="/media/logo.png"
+      src="/media/logo_glossy_original_colors.png"
       alt="Dr. Ashish Bhola Dermatology Center"
       className="brand-logo"
     />
