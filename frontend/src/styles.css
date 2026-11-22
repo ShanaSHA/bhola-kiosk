@@ -269,3 +269,69 @@
         gap: 5px;
     }
 }
+
+/* =========================================================
+   LOGIN PASSWORD SHOW / HIDE EYE ICON
+   ========================================================= */
+
+.login-page .password-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    text-align: start;
+}
+
+.login-page .password-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.login-page .password-input-wrap input {
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 48px 12px 12px !important;
+    border: 1px solid #cfc1c7;
+    border-radius: 3px;
+    background: #fffafb;
+    color: #1b1517;
+    font-size: 16px;
+}
+
+.login-page .password-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    color: #8a1538;
+    cursor: pointer;
+}
+
+.login-page .password-eye:hover {
+    color: #b18a45;
+    background: transparent;
+}
+
+.login-page .password-eye:focus-visible {
+    outline: 2px solid #b18a45;
+    border-radius: 5px;
+}
+
+[dir="rtl"] .login-page .password-input-wrap input {
+    padding-right: 12px !important;
+    padding-left: 48px !important;
+}
+
+[dir="rtl"] .login-page .password-eye {
+    right: auto;
+    left: 10px;
+}
