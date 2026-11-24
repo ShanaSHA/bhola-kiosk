@@ -504,7 +504,7 @@ export default function Portal({admin=false}:{admin?:boolean}){
           }}
         />
       </label>
-      <small>Recommended resolution: 800 × 800 px</small>
+      <small>Recommended resolution: 1000 × 1000 px</small>
     </div>
 
   </div>
@@ -763,8 +763,15 @@ export default function Portal({admin=false}:{admin?:boolean}){
            }}/>
           </span>
           <small>
-           Recommended resolution: {section==='banners'?'1920 × 600 px':section==='packages'?'1200 × 800 px':'800 × 800 px'}
-          </small>
+Recommended resolution: {
+  section === 'banners'
+    ? '1920 × 600 px'
+    : section === 'packages'
+    ? '1200 × 800 px'
+    : section === 'doctors'
+    ? '1000 × 1250 px'
+    : '1000 × 1000 px'
+}          </small>
          </label>
         :field==='category'?
          <label key={field}>
