@@ -2231,3 +2231,19 @@ max-width: 600px !important;
     max-height: 100%;
 }
 
+/* Banner navigation - English */
+.banner {
+  position: relative;
+}
+
+.banner-controls {
+  right: 18px;
+  left: auto;
+  z-index: 5;
+}
+
+/* Banner navigation - Arabic */
+html[dir="rtl"] .banner-controls {
+  right: auto !important;
+  left: 18px !important;
+}
