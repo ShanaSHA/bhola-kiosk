@@ -398,9 +398,9 @@ const slides = banners;
               />
 
               <h1>
-                Welcome.
+                Welcome
                 <br/>
-                <span>Discover Your Care.</span>
+                <span>Discover Your Care</span>
               </h1>
 
               <p>Tap anywhere to continue</p>
