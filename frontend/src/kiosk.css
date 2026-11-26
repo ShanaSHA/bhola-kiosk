@@ -3420,3 +3420,29 @@ html[dir="rtl"] .visitor-app .banner-copy {
 html[dir="rtl"] .visitor-app .banner-photo {
   margin: 0;
 }
+
+/* UNIVERSAL ARROW — iOS + ANDROID + DESKTOP */
+
+.visitor-app .circle-arrow {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    flex: 0 0 38px !important;
+    border: 1px solid #ffffff88 !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    color: #fff !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+}
+
+.visitor-app .circle-arrow::before {
+    content: "\2197\FE0E" !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 23px !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    line-height: 1 !important;
+}
