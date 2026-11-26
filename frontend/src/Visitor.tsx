@@ -5,14 +5,33 @@ import {initialContent,type Content,type Item} from './lib/content';
 import './kiosk.css';
 
 type Screen='welcome'|'language'|'home'|'categories'|'services'|'detail'|'doctors'|'doctor'|'about'|'packages'|'package'|'contact';
-type Position={screen:Screen;page:number;itemId:string;categoryId:string};
 
-const start:Position={screen:'welcome',page:0,itemId:'',categoryId:''};
+type Position={
+  screen:Screen;
+  page:number;
+  itemId:string;
+  categoryId:string;
+};
+
+type ContactPage={
+  title:string;
+  type:'visit'|'team'|'social';
+};
+
+const start:Position={
+  screen:'welcome',
+  page:0,
+  itemId:'',
+  categoryId:''
+};
+
 const pageSize=3;
 
 function mediaUrl(value?:string){
   if(!value)return '';
+
   if(value.startsWith('/')&&!value.startsWith('//'))return value;
+
   try{
     const u=new URL(value);
     return ['https:','http:'].includes(u.protocol)?value:'';
@@ -28,11 +47,13 @@ function splitText(value:string,size=420){
   while(rest.length>size){
     let at=rest.lastIndexOf(' ',size);
     if(at<1)at=size;
+
     result.push(rest.slice(0,at));
     rest=rest.slice(at).trim();
   }
 
   if(rest)result.push(rest);
+
   return result;
 }
 
@@ -43,7 +64,7 @@ function Photo({
 }:{
   src?:string;
   alt?:string;
-  className?:string
+  className?:string;
 }) {
   return (
     <img
@@ -51,6 +72,56 @@ function Photo({
       alt={alt}
       className={className}
     />
+  );
+}
+
+// Location and opening-hours icons
+function ContactSvg({
+  name
+}:{
+  name:'map-pin'|'clock';
+}){
+  if(name==='map-pin'){
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle
+          cx="12"
+          cy="10"
+          r="2.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle
+        cx="12"
+        cy="12"
+        r="9"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M12 7v5l3 2"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
 
@@ -68,10 +139,25 @@ export default function Visitor(){
   const [reduced,setReduced]=useState(false);
 
   const mainRef=useRef<HTMLElement>(null);
-    const inactivityTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const inactivityTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+
   const {screen,page,itemId,categoryId}=position;
-  
-  // Auto return to Welcome after 2 minutes without activity
+
+  // Translation
+  const t=(en:string,ar:string)=>lang==='ar'?ar:en;
+
+  const field=(
+    x:Item|Record<string,string>|undefined,
+    k:string
+  )=>{
+    if(!x)return '';
+
+    const r=x as Record<string,string>;
+
+    return (lang==='ar'?r[k+'_ar']||r[k]:r[k])||'';
+  };
+
+  // Auto return to Welcome after inactivity
   useEffect(()=>{
     if(screen==='welcome')return;
 
@@ -117,18 +203,7 @@ export default function Visitor(){
     };
   },[screen]);
 
-  const t=(en:string,ar:string)=>lang==='ar'?ar:en;
-
-  const field=(
-    x:Item|Record<string,string>|undefined,
-    k:string
-  )=>{
-    if(!x)return '';
-    const r=x as Record<string,string>;
-    return (lang==='ar'?r[k+'_ar']||r[k]:r[k])||'';
-  };
-
-  // Get uploaded image URLs from Admin content
+  // Admin uploaded images
   const welcomeContent=data.welcome as Record<string,string>;
 
   const findUsImage=
@@ -137,6 +212,7 @@ export default function Visitor(){
   const aboutImage=
     welcomeContent.about_image_url||'/media/image29.webp';
 
+  // Load clinic content
   async function load(){
     setError('');
 
@@ -168,6 +244,7 @@ export default function Visitor(){
     void load();
   },[]);
 
+  // Language direction
   useEffect(()=>{
     document.documentElement.lang=lang;
     document.documentElement.dir=lang==='ar'?'rtl':'ltr';
@@ -177,6 +254,7 @@ export default function Visitor(){
     };
   },[lang]);
 
+  // Reduced motion preference
   useEffect(()=>{
     const q=matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -189,8 +267,9 @@ export default function Visitor(){
     return()=>q.removeEventListener('change',update);
   },[]);
 
+  // Banners
   const banners=data.banners.filter(b=>mediaUrl(b.image));
-const slides = banners;
+  const slides=banners;
 
   useEffect(()=>{
     if(reduced||screen!=='home'||slides.length<2)return;
@@ -202,16 +281,23 @@ const slides = banners;
     },8000);
 
     return()=>clearInterval(timer);
-
   },[reduced,screen,slides.length]);
 
+  // Scroll to top when changing page
   useEffect(()=>{
     mainRef.current?.scrollTo(0,0);
   },[position,lang]);
 
+  // Navigation
   function go(next:Screen,extras:Partial<Position>={}){
     setHistory(h=>[...h,position]);
-    setPosition({...position,screen:next,page:0,...extras});
+
+    setPosition({
+      ...position,
+      screen:next,
+      page:0,
+      ...extras
+    });
   }
 
   function back(){
@@ -228,15 +314,10 @@ const slides = banners;
     }
   }
 
+  // Categories
   const cats=[
     ...data.categories
   ].sort((a,b)=>Number(a.order||0)-Number(b.order||0));
-
-  console.log(
-    'Categories received:',
-    cats.length,
-    cats.map(c=>c.name)
-  );
 
   const cat=data.categories.find(c=>c.id===categoryId);
 
@@ -249,6 +330,7 @@ const slides = banners;
     </span>
   );
 
+  // Reusable tile
   function tile(
     name:string,
     sub:string,
@@ -259,17 +341,21 @@ const slides = banners;
     return (
       <button className={`tile ${cls}`} onClick={onClick}>
         <Photo src={src}/>
+
         <span className="tile-label">
           <span>
-            {sub&&<small>{sub}</small>}
+           
             <strong>{name}</strong>
+             {sub&&<small>{sub}</small>}
           </span>
+
           {arrow}
         </span>
       </button>
     );
   }
 
+  // Section heading
   function heading(ey:string,title:string,sub=''){
     return (
       <div className="section-head">
@@ -277,11 +363,13 @@ const slides = banners;
           <div className="eyebrow">{ey}</div>
           <h1>{title}</h1>
         </div>
+
         {sub&&<p>{sub}</p>}
       </div>
     );
   }
 
+  // Action button
   function action(label:string,next:Screen){
     return (
       <button className="action" onClick={()=>go(next)}>
@@ -291,12 +379,14 @@ const slides = banners;
     );
   }
 
+  // Detail layout
   function detail(src:string|undefined,body:ReactNode){
     return (
       <div className="detail">
         <figure className="detail-photo">
           <Photo src={src}/>
         </figure>
+
         <section className="detail-copy">
           {body}
         </section>
@@ -304,27 +394,160 @@ const slides = banners;
     );
   }
 
+  // Contact link generation
+  function contactLink(value:string,key:string){
+
+    const v=value.trim();
+
+    if(!v)return '';
+
+    if(key==='email'){
+      return `mailto:${v}`;
+    }
+
+    if(
+      key==='telephone'||
+      key==='telephone2'||
+      key==='mobile'
+    ){
+      return `tel:${v.replace(/[^\d+]/g,'')}`;
+    }
+
+    if(key==='map'){
+      if(/^https?:\/\//i.test(v))return v;
+
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v)}`;
+    }
+
+    if(/^https?:\/\//i.test(v)){
+      return v;
+    }
+
+    if(
+      key==='instagram'||
+      key==='facebook'||
+      key==='tiktok'
+    ){
+      return `https://${v.replace(/^\/\//,'').replace(/^www\./,'')}`;
+    }
+
+    return v;
+  }
+
+  // Social media icons
+  function contactIcon(name:string,value:string){
+
+    const labels:Record<string,[string,string]>={
+      instagram:['Instagram','إنستغرام'],
+      facebook:['Facebook','فيسبوك'],
+      tiktok:['TikTok','تيك توك']
+    };
+
+    const href=contactLink(value,name);
+
+    if(!href)return null;
+
+    return (
+      <a
+        key={name}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`contact-icon-link icon-${name}`}
+        aria-label={t(
+          labels[name]?.[0]||name,
+          labels[name]?.[1]||name
+        )}
+      >
+        <span className="contact-symbol">
+
+          {name==='instagram'&&(
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
+              <circle
+                cx="17.5"
+                cy="6.8"
+                r="1.2"
+                fill="currentColor"
+              />
+            </svg>
+          )}
+
+          {name==='facebook'&&(
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8z"
+              />
+            </svg>
+          )}
+
+          {name==='tiktok'&&(
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M19.5 8.2a6.6 6.6 0 0 1-4-1.4v8.1a5.6 5.6 0 1 1-5.6-5.6c.4 0 .8 0 1.2.1v3.1a2.5 2.5 0 1 0 1.3 2.2V3h3.1c.2 2 1.7 3.7 4 4z"
+              />
+            </svg>
+          )}
+
+        </span>
+
+        <small>
+          {t(
+            labels[name]?.[0]||name,
+            labels[name]?.[1]||name
+          )}
+        </small>
+      </a>
+    );
+  }
+
+  // Reusable list
   function list(items:Item[],next:Screen){
 
     totalPages=1;
 
     return items.length?(
       <div className="collection">
+
         {items.map(i=>(
           <div className="tile-holder" key={i.id}>
             {tile(
               field(i,'name'),
+
               i.price
                 ?`${t('QAR','ر.ق')} ${field(i,'price')}`
                 :t('VIEW DETAILS','عرض التفاصيل'),
+
               i.image,
+
               ()=>go(next,{itemId:i.id})
             )}
           </div>
         ))}
+
       </div>
     ):(
       <div className="empty-state">
+
         <h2>
           {t(
             'Speak with our reception team',
@@ -343,12 +566,14 @@ const slides = banners;
           t('Contact our clinic','تواصل مع المركز'),
           'contact'
         )}
+
       </div>
     );
   }
 
   let body:ReactNode;
 
+  // WELCOME AND LANGUAGE
   if(screen==='welcome'||screen==='language'){
 
     const language=screen==='language';
@@ -372,6 +597,7 @@ const slides = banners;
 
         {!language?(
           <>
+
             <video
               key={welcomeVideo}
               className="welcome-video"
@@ -406,9 +632,11 @@ const slides = banners;
               <p>Tap anywhere to continue</p>
 
             </div>
+
           </>
         ):(
           <>
+
             <video
               key={languageVideo}
               className="welcome-video language-video"
@@ -465,6 +693,7 @@ const slides = banners;
               </div>
 
             </div>
+
           </>
         )}
 
@@ -475,10 +704,12 @@ const slides = banners;
       ?'English · العربية'
       :'Welcome · أهلاً بكم';
 
+  // LOADING
   }else if(error||!loaded){
 
     body=(
       <div className="empty-state">
+
         <h1>{t('Welcome','مرحباً')}</h1>
 
         <p role={error?'alert':undefined}>
@@ -496,45 +727,53 @@ const slides = banners;
             {t('Try again','حاول مرة أخرى')}
           </button>
         )}
+
       </div>
     );
 
+  // HOME
   }else if(screen==='home'){
 
     const current=slides[banner%slides.length];
 
     body=(
       <>
+
         <div className="banner">
 
           <div className="banner-copy">
+
             <div className="eyebrow">
               {t('WELCOME TO OUR CLINIC','مرحباً بكم في مركزنا')}
             </div>
 
-            <h1>
-              {t('Your skin.','بشرتك.')}
-              <br/>
-              {t('Our expertise.','خبرتنا.')}
-            </h1>
+           <h1>
+  {field(data.welcome, 'title')
+    .split('\n')
+    .map((line, i) => (
+      <span key={i} className={i === 1 ? 'gold-text' : ''}>
+        {line}
+        {i === 0 && <br />}
+      </span>
+    ))}
+</h1>
 
-            <p>
-              {t(
-                'Touch a section to explore.',
-                'المس قسماً لاستكشافه.'
-              )}
-            </p>
+<p>
+  {field(data.welcome, 'description')}
+</p>
+
           </div>
 
           <div className="banner-photo">
             <Photo
-              src={current.image}
+              src={current?.image}
               className="banner-image"
             />
           </div>
 
           {slides.length>1&&(
             <div className="banner-controls">
+
               <button
                 aria-label={t('Previous banner','الصورة السابقة')}
                 onClick={()=>setBanner(n=>(n-1+slides.length)%slides.length)}
@@ -548,6 +787,7 @@ const slides = banners;
               >
                 ›
               </button>
+
             </div>
           )}
 
@@ -581,16 +821,15 @@ const slides = banners;
             'clinic'
           )}
 
-         {tile(
-  t('Offers','عروض'),
-  t('TREATMENT OPTIONS','خيارات العلاج'),
-  (data.welcome as Record<string,string>).offers_image_url ||
-    data.packages[0]?.image ||
-    '/media/image27.webp',
-  ()=>go('packages')
-)}
+          {tile(
+            t('Offers','عروض'),
+            t('TREATMENT OPTIONS','خيارات العلاج'),
+            welcomeContent.offers_image_url||
+              data.packages[0]?.image||
+              '/media/image27.webp',
+            ()=>go('packages')
+          )}
 
-          {/* Find Us tile uses Admin uploaded image */}
           {tile(
             t('Find us','موقعنا'),
             t('CONTACT & LOCATION','التواصل والموقع'),
@@ -600,15 +839,18 @@ const slides = banners;
           )}
 
         </nav>
-            </>
+
+      </>
     );
 
+  // CATEGORIES
   }else if(screen==='categories'){
 
     totalPages=1;
 
     body=(
       <>
+
         {heading(
           t('EXPLORE YOUR CARE','استكشف رعايتك'),
           t('Our treatments','علاجاتنا'),
@@ -619,6 +861,7 @@ const slides = banners;
         )}
 
         <div className="collection">
+
           {cats.map(c=>(
             <div className="tile-holder" key={c.id}>
               {tile(
@@ -629,14 +872,18 @@ const slides = banners;
               )}
             </div>
           ))}
+
         </div>
+
       </>
     );
 
+  // SERVICES
   }else if(screen==='services'){
 
     body=(
       <>
+
         {heading(
           t('OUR TREATMENTS','علاجاتنا'),
           field(cat,'name')
@@ -646,15 +893,19 @@ const slides = banners;
           data.services.filter(s=>s.category===categoryId),
           'detail'
         )}
+
       </>
     );
 
+  // DOCTORS AND OFFERS
   }else if(screen==='doctors'||screen==='packages'){
 
     body=(
       <>
+
         {heading(
           t('OUR CLINIC','مركزنا'),
+
           screen==='doctors'
             ?t('Medical team','الفريق الطبي')
             :t('Treatment Offers','عروض العلاج')
@@ -664,9 +915,11 @@ const slides = banners;
           screen==='doctors'?data.doctors:data.packages,
           screen==='doctors'?'doctor':'package'
         )}
+
       </>
     );
 
+  // DETAILS
   }else if(screen==='detail'||screen==='doctor'||screen==='package'){
 
     const item=(
@@ -691,7 +944,7 @@ const slides = banners;
       const parts:{
         title:string;
         text:string;
-        list?:boolean
+        list?:boolean;
       }[]=[];
 
       const add=(
@@ -787,6 +1040,7 @@ const slides = banners;
       body=detail(
         item.image,
         <>
+
           <div className="eyebrow">
             {screen==='detail'
               ?field(cat,'name')
@@ -809,6 +1063,7 @@ const slides = banners;
             className="detail-tabs"
             aria-label={t('Information sections','أقسام المعلومات')}
           >
+
             {parts.map((part,index)=>
               parts.findIndex(p=>p.title===part.title)===index?(
                 <button
@@ -822,6 +1077,7 @@ const slides = banners;
                 </button>
               ):null
             )}
+
           </nav>
 
           <h2>{current.title}</h2>
@@ -844,14 +1100,16 @@ const slides = banners;
               )}
             </p>
           )}
+
         </>
       );
     }
 
+  // ABOUT US
   }else if(screen==='about'){
 
     const labels:Record<string,[string,string]>={
-      overview:['About Us','ممن نحن'],
+      overview:['About Us','من نحن'],
       profile:['Our approach','نهجنا'],
       vision:['Vision','الرؤية'],
       mission:['Mission','الرسالة'],
@@ -872,10 +1130,14 @@ const slides = banners;
 
     const part=sections[Math.min(page,sections.length-1)];
 
-    // About Us page uses Admin uploaded image
     body=detail(
       aboutImage,
       <>
+
+        <div className="eyebrow">
+          {t('ABOUT OUR CLINIC','عن مركزنا')}
+        </div>
+
         <h1>
           {part?.title||t('About Us','من نحن')}
         </h1>
@@ -886,66 +1148,206 @@ const slides = banners;
             'تحدث مع فريقنا لمعرفة المزيد.'
           )}
         </p>
+
       </>
     );
 
+  // FIND US AND CONTACT
   }else{
 
-    const groups=[
+    const address=field(data.contact,'address');
+    const hours=field(data.contact,'hours');
+
+    const phoneNumbers=[
+      field(data.contact,'telephone'),
+      field(data.contact,'telephone2'),
+      field(data.contact,'mobile')
+    ].filter(Boolean);
+
+    const email=field(data.contact,'email');
+
+    const socialLinks=[
+      {
+        key:'instagram',
+        value:data.contact.instagram
+      },
+      {
+        key:'facebook',
+        value:data.contact.facebook
+      },
+      {
+        key:'tiktok',
+        value:data.contact.tiktok
+      }
+    ].filter(item=>item.value);
+
+    const pages:ContactPage[]=[
       {
         title:t('Visit our clinic','زوروا مركزنا'),
-        values:[
-          field(data.contact,'address'),
-          field(data.contact,'hours')
-        ]
+        type:'visit'
       },
       {
         title:t('Speak to our team','تحدث مع فريقنا'),
-        values:[
-          field(data.contact,'telephone'),
-          field(data.contact,'telephone2'),
-          field(data.contact,'mobile'),
-          field(data.contact,'email')
-        ]
+        type:'team'
       },
       {
-        title:t('Online','عبر الإنترنت'),
-        values:['instagram','facebook','tiktok','map']
-          .map(k=>data.contact[k])
-          .filter(Boolean)
+        title:t('Connect with us','تواصل معنا'),
+        type:'social'
       }
-    ].filter(g=>g.values.some(Boolean));
+    ];
 
-    const pages=groups.flatMap(g=>
-      splitText(g.values.filter(Boolean).join('\n\n')).map(text=>({
-        title:g.title,
-        text
-      }))
-    );
-
-    totalPages=Math.max(1,pages.length);
+    totalPages=pages.length;
 
     const current=pages[Math.min(page,pages.length-1)];
 
-    // Find Us page uses Admin uploaded image
     body=detail(
       findUsImage,
       <>
+
         <div className="eyebrow">
           {t('CONTACT & LOCATION','التواصل والموقع')}
         </div>
 
-        <h1>
-          {current?.title||t('Contact','التواصل')}
-        </h1>
+        <h1>{current.title}</h1>
 
-        <p className="content-text contact-text">
-          {current?.text}
-        </p>
+        {current.type==='visit'&&(
+          <div className="contact-page-content">
+
+            {address&&(
+              <div className="contact-detail-block">
+
+                <span className="contact-info-icon">
+                  <ContactSvg name="map-pin"/>
+                </span>
+
+                <div>
+                  <h2>{t('Clinic address','عنوان المركز')}</h2>
+                  <p className="content-text">{address}</p>
+                </div>
+
+              </div>
+            )}
+
+            {hours&&(
+              <div className="contact-detail-block">
+
+                <span className="contact-info-icon">
+                  <ContactSvg name="clock"/>
+                </span>
+
+                <div>
+                  <h2>{t('Opening hours','ساعات العمل')}</h2>
+                  <p className="content-text">{hours}</p>
+                </div>
+
+              </div>
+            )}
+
+            {!address&&!hours&&(
+              <p className="content-text">
+                {t(
+                  'Please contact our clinic for location and opening hours.',
+                  'يرجى التواصل مع المركز لمعرفة الموقع وساعات العمل.'
+                )}
+              </p>
+            )}
+
+            {data.contact.map&&(
+              <a
+                className="contact-map-link"
+                href={contactLink(data.contact.map,'map')}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t('View location on Google Maps','عرض الموقع على خرائط Google')}
+                <span>↗</span>
+              </a>
+            )}
+
+          </div>
+        )}
+
+        {current.type==='team'&&(
+          <div className="contact-page-content">
+
+            <p className="content-text">
+              {t(
+                'Our team is here to help with appointments and enquiries.',
+                'فريقنا هنا لمساعدتك في المواعيد والاستفسارات.'
+              )}
+            </p>
+
+            <div className="contact-team-list">
+
+              {phoneNumbers.map((phone,index)=>(
+                <a
+                  key={`phone-${index}`}
+                  href={contactLink(
+                    phone,
+                    index===0?'telephone':'telephone2'
+                  )}
+                  className="contact-team-link"
+                >
+                  {phone}
+                </a>
+              ))}
+
+              {email&&(
+                <a
+                  href={contactLink(email,'email')}
+                  className="contact-team-link"
+                >
+                  {email}
+                </a>
+              )}
+
+            </div>
+
+            {!phoneNumbers.length&&!email&&(
+              <p className="content-text">
+                {t(
+                  'Please contact our reception team for assistance.',
+                  'يرجى التواصل مع فريق الاستقبال للحصول على المساعدة.'
+                )}
+              </p>
+            )}
+
+          </div>
+        )}
+
+        {current.type==='social'&&(
+          <div className="contact-page-content">
+
+            <p className="content-text">
+              {t(
+                'Follow us and stay connected with our clinic.',
+                'تابعونا وابقوا على تواصل مع مركزنا.'
+              )}
+            </p>
+
+            <div className="contact-icons">
+              {socialLinks.map(item=>
+                contactIcon(item.key,item.value!)
+              )}
+            </div>
+
+            {!socialLinks.length&&(
+              <p className="content-text">
+                {t(
+                  'Our social media links will be available soon.',
+                  'ستتوفر روابط التواصل الاجتماعي قريباً.'
+                )}
+              </p>
+            )}
+
+          </div>
+        )}
+
       </>
     );
   }
 
+  // Page status
   if(!['welcome','language','home'].includes(screen)&&loaded&&!error){
     status=t(
       `${page+1} / ${totalPages} · Clinic information`,
@@ -953,6 +1355,7 @@ const slides = banners;
     );
   }
 
+  // MAIN RENDER
   return (
     <div className="visitor-app">
 
@@ -962,20 +1365,24 @@ const slides = banners;
           <header className="header">
 
             <div className="brand-ribbon">
+
               <img
                 src="/media/logo_glossy_original_colors.png"
                 alt="Dr. Ashish Bhola Dermatology Center"
                 className="brand-logo"
               />
+
             </div>
 
             <div className="header-right">
+
               <button
                 className="language"
                 onClick={()=>go('language')}
               >
                 <span>English / العربية</span>
               </button>
+
             </div>
 
           </header>
@@ -987,7 +1394,29 @@ const slides = banners;
           key={screen+page}
           aria-live="polite"
         >
+
           {body}
+
+          {/* NEXT BUTTON - ABOUT US AND FIND US */}
+
+          {(screen==='about'||screen==='contact')&&totalPages>1&&(
+            <div className="page-navigation">
+
+              <button
+                onClick={()=>{
+                  setPosition(p=>({
+                    ...p,
+                    page:Math.min(p.page+1,totalPages-1)
+                  }));
+                }}
+                disabled={page>=totalPages-1}
+              >
+                {t('Next →','التالي ←')}
+              </button>
+
+            </div>
+          )}
+
         </main>
 
         {!['welcome','language'].includes(screen)&&(
@@ -995,23 +1424,9 @@ const slides = banners;
 
             <div className="footer-actions">
 
-             <button onClick={back}>
-  {t('← Back','عودة →')}
-</button>
-
-{(screen==='about'||screen==='contact')&&(
-  <button
-    onClick={()=>{
-      setPosition(p=>({
-        ...p,
-        page:Math.min(p.page+1,totalPages-1)
-      }));
-    }}
-    disabled={page>=totalPages-1}
-  >
-    {t('Next →','التالي ←')}
-  </button>
-)}
+              <button onClick={back}>
+                {t('← Back','عودة →')}
+              </button>
 
               {[
                 {label:t('Home','الرئيسية'),screen:'home'},
@@ -1039,6 +1454,7 @@ const slides = banners;
         )}
 
       </div>
+
     </div>
   );
 }

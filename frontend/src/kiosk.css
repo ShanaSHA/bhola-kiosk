@@ -2247,3 +2247,171 @@ html[dir="rtl"] .banner-controls {
   right: auto !important;
   left: 18px !important;
 }
+/* About Us and Find Us page navigation */
+
+.visitor-app .page-navigation {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 24px 20px;
+    width: 100%;
+}
+
+.visitor-app .page-navigation button {
+    background: #8a1538;
+    color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.visitor-app .page-navigation button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.visitor-app[dir="rtl"] .page-navigation {
+    justify-content: flex-start;
+}
+
+/* =====================================
+   CONTACT PAGES
+===================================== */
+
+.visitor-app .contact-page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.visitor-app .contact-detail-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px;
+  background: rgba(138, 21, 56, 0.06);
+  border-radius: 14px;
+}
+
+.visitor-app .contact-detail-block h2 {
+  margin: 0 0 8px;
+}
+
+.visitor-app .contact-info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  color: #8a1538;
+}
+
+.visitor-app .contact-info-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Speak to our team */
+
+.visitor-app .contact-team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.visitor-app .contact-team-link {
+  display: block;
+  padding: 17px 20px;
+  color: #8a1538;
+  background: rgba(138, 21, 56, 0.06);
+  border: 1px solid rgba(138, 21, 56, 0.12);
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Google Maps link */
+
+.visitor-app .contact-map-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 15px 20px;
+  color: #fff;
+  background: #8a1538;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Connect with us */
+
+.visitor-app .contact-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 12px;
+}
+
+.visitor-app .contact-icon-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100px;
+  min-height: 110px;
+  color: #8a1538;
+  text-decoration: none;
+  border: 1px solid rgba(138, 21, 56, 0.16);
+  border-radius: 16px;
+  background: rgba(138, 21, 56, 0.05);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.visitor-app .contact-icon-link:active {
+  transform: scale(0.96);
+}
+
+.visitor-app .contact-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+}
+
+.visitor-app .contact-symbol svg {
+  width: 32px;
+  height: 32px;
+}
+
+.visitor-app .contact-icon-link small {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.visitor-app .contact-icon-link:hover {
+  background: rgba(138, 21, 56, 0.12);
+}
+
+/* Mobile and smaller kiosk screens */
+
+@media (max-width: 600px) {
+  .visitor-app .contact-icons {
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .visitor-app .contact-icon-link {
+    width: 88px;
+    min-height: 96px;
+  }
+}
