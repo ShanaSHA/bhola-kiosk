@@ -13,7 +13,6 @@ import {useEffect,useState} from 'react';
 import {ArrowRight,ArrowLeft,Home,Sparkles,UserRound,MapPin,Layers,Info,Phone,Mail,Clock,Plus,Pencil,Trash2,Save,ImagePlus,ShieldCheck,Globe2,LogOut,Video} from 'lucide-react';
 
 
-
 import {Dialog,DialogContent,DialogHeader,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 
 
@@ -266,7 +265,22 @@ export default function Portal({admin=false}:{admin?:boolean}){
 
 
 
-   setData(j.data);
+  setData({
+  ...initialContent,
+  ...j.data,
+  welcome: {
+    ...initialContent.welcome,
+    ...(j.data.welcome || {})
+  },
+  about: {
+    ...initialContent.about,
+    ...(j.data.about || {})
+  },
+  contact: {
+    ...initialContent.contact,
+    ...(j.data.contact || {})
+  }
+});
 
 
 
@@ -2587,7 +2601,7 @@ export default function Portal({admin=false}:{admin?:boolean}){
 
 
          {['instagram','facebook','tiktok'].map(k=>safe(data.contact[k])&&<a className="social" key={k} href={safe(data.contact[k])} target="_blank" rel="noreferrer">{label(k,lang)} ↗</a>)}
-
+            
 
 
         </div>

@@ -137,7 +137,8 @@ export default function Visitor(){
 
   const [banner,setBanner]=useState(0);
   const [reduced,setReduced]=useState(false);
-
+  const [showWhatsappQr,setShowWhatsappQr]=useState(false);
+  const [showKioskQr,setShowKioskQr]=useState(false);
   const mainRef=useRef<HTMLElement>(null);
   const inactivityTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
 
@@ -227,7 +228,23 @@ export default function Visitor(){
         throw new Error();
       }
 
-      setData(result.data);
+      setData({
+        ...initialContent,
+        ...result.data,
+        welcome: {
+          ...initialContent.welcome,
+          ...(result.data.welcome || {})
+        },
+        about: {
+          ...initialContent.about,
+          ...(result.data.about || {})
+        },
+        contact: {
+          ...initialContent.contact,
+          ...(result.data.contact || {})
+        }
+      });
+
       setLoaded(true);
 
     }catch{
@@ -344,9 +361,8 @@ export default function Visitor(){
 
         <span className="tile-label">
           <span>
-           
             <strong>{name}</strong>
-             {sub&&<small>{sub}</small>}
+            {sub&&<small>{sub}</small>}
           </span>
 
           {arrow}
@@ -434,13 +450,14 @@ export default function Visitor(){
     return v;
   }
 
-  // Social media icons
+  // Social media and email icons
   function contactIcon(name:string,value:string){
 
     const labels:Record<string,[string,string]>={
       instagram:['Instagram','إنستغرام'],
       facebook:['Facebook','فيسبوك'],
-      tiktok:['TikTok','تيك توك']
+      tiktok:['TikTok','تيك توك'],
+      email:['Email','البريد الإلكتروني']
     };
 
     const href=contactLink(value,name);
@@ -451,8 +468,8 @@ export default function Visitor(){
       <a
         key={name}
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={name==='email'?undefined:'_blank'}
+        rel={name==='email'?undefined:'noopener noreferrer'}
         className={`contact-icon-link icon-${name}`}
         aria-label={t(
           labels[name]?.[0]||name,
@@ -504,6 +521,29 @@ export default function Visitor(){
               <path
                 fill="currentColor"
                 d="M19.5 8.2a6.6 6.6 0 0 1-4-1.4v8.1a5.6 5.6 0 1 1-5.6-5.6c.4 0 .8 0 1.2.1v3.1a2.5 2.5 0 1 0 1.3 2.2V3h3.1c.2 2 1.7 3.7 4 4z"
+              />
+            </svg>
+          )}
+
+          {name==='email'&&(
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect
+                x="3"
+                y="5"
+                width="18"
+                height="14"
+                rx="2"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
+              <path
+                d="m4 7 8 6 8-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           )}
@@ -629,7 +669,182 @@ export default function Visitor(){
                 <span>Discover Your Care</span>
               </h1>
 
-              <p>Tap anywhere to continue</p>
+            <p>Tap anywhere to continue</p>
+{/* Floating WhatsApp button */}
+{/* Floating dock: kiosk + WhatsApp */}
+<div className="welcome-dock">
+
+  <button
+    type="button"
+    className="welcome-kiosk-button"
+    aria-label={t('Open kiosk QR code','افتح رمز الكشك')}
+    onClick={e=>{
+      e.stopPropagation();
+      setShowKioskQr(true);
+    }}
+  >
+    <span className="dock-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"
+          d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3z"/>
+        <path fill="currentColor" d="M14 14h3v3h-3zM18 14h3v3h-3zM14 18h3v3h-3zM18 18h3v3h-3z"/>
+      </svg>
+    </span>
+    <span className="dock-label">{t('BROWSE YOUR KIOSK','تصفح كشكك')}</span>
+  </button>
+
+  <span className="dock-divider" aria-hidden="true"/>
+
+  <button
+    type="button"
+    className="welcome-whatsapp-button"
+    aria-label={t('Open WhatsApp QR code','افتح رمز واتساب')}
+    onClick={e=>{
+      e.stopPropagation();
+      setShowWhatsappQr(true);
+    }}
+  >
+    <span className="dock-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M20.5 3.5A11.8 11.8 0 0 0 2 17.7L.5 23.5l6-1.5A11.8 11.8 0 1 0 20.5 3.5ZM12 21a9 9 0 0 1-4.6-1.3l-.3-.2-3.5.9.9-3.4-.2-.4A9 9 0 1 1 12 21Zm5-6.7c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.6l-.9-2.1c-.2-.5-.5-.4-.7-.4h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.3 3.2c.2.2 2.2 3.4 5.3 4.6 2 .8 2.8.9 3.8.7.6-.1 1.8-.8 2-1.5.2-.7.2-1.3.1-1.5-.1-.2-.3-.3-.6-.5Z"
+        />
+      </svg>
+    </span>
+    <span className="dock-label">WHATSAPP</span>
+  </button>
+
+</div>
+
+{/* WhatsApp QR popup */}
+{showWhatsappQr&&(
+  <div
+    className="whatsapp-qr-overlay"
+    onClick={e=>{
+      e.stopPropagation();
+      setShowWhatsappQr(false);
+    }}
+  >
+    <div
+      className="whatsapp-qr-modal"
+      onClick={e=>e.stopPropagation()}
+    >
+      <button
+        type="button"
+        className="whatsapp-qr-close"
+        onClick={()=>setShowWhatsappQr(false)}
+        aria-label={t('Close','إغلاق')}
+      >
+        ×
+      </button>
+
+      <div className="whatsapp-qr-heading">
+        <span className="whatsapp-modal-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M20.5 3.5A11.8 11.8 0 0 0 2 17.7L.5 23.5l6-1.5A11.8 11.8 0 1 0 20.5 3.5ZM12 21a9 9 0 0 1-4.6-1.3l-.3-.2-3.5.9.9-3.4-.2-.4A9 9 0 1 1 12 21Zm5-6.7c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.6l-.9-2.1c-.2-.5-.5-.4-.7-.4h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.3 3.2c.2.2 2.2 3.4 5.3 4.6 2 .8 2.8.9 3.8.7.6-.1 1.8-.8 2-1.5.2-.7.2-1.3.1-1.5-.1-.2-.3-.3-.6-.5Z"
+            />
+          </svg>
+        </span>
+        <div>
+          <h2>{t('Connect with us','تواصل معنا')}</h2>
+          <p>DR. ASHISH BHOLA DERMATOLOGY CENTER</p>
+        </div>
+      </div>
+
+      <div className="whatsapp-qr-body">
+        <div className="whatsapp-qr-image">
+          <img src="/media/whatsapp-qr.png" alt="WhatsApp QR Code"/>
+          <i className="qr-corner tl"/><i className="qr-corner tr"/>
+          <i className="qr-corner bl"/><i className="qr-corner br"/>
+        </div>
+
+        <div className="whatsapp-qr-info">
+          <span className="whatsapp-qr-label">WHATSAPP</span>
+          <h3>{t('Scan to chat with our team','امسح الرمز للتواصل مع فريقنا')}</h3>
+          <p className="whatsapp-qr-description">
+            {t(
+              'Scan this QR code with your phone to message our clinic on WhatsApp.',
+              'امسح رمز الاستجابة السريعة بهاتفك للتواصل مع مركزنا عبر واتساب.'
+            )}
+          </p>
+          <ol className="whatsapp-qr-steps">
+            <li><b>1</b>{t('Open your phone camera','افتح كاميرا هاتفك')}</li>
+            <li><b>2</b>{t('Point it at the code','وجّهها نحو الرمز')}</li>
+            <li><b>3</b>{t('Tap the link and chat','اضغط الرابط وابدأ المحادثة')}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+{/* Floating kiosk QR button */}
+
+
+{/* Kiosk QR popup */}
+{showKioskQr&&(
+  <div
+    className="whatsapp-qr-overlay"
+    onClick={e=>{
+      e.stopPropagation();
+      setShowKioskQr(false);
+    }}
+  >
+    <div
+      className="whatsapp-qr-modal kiosk-qr-modal"
+      onClick={e=>e.stopPropagation()}
+    >
+      <button
+        type="button"
+        className="whatsapp-qr-close"
+        onClick={()=>setShowKioskQr(false)}
+        aria-label={t('Close','إغلاق')}
+      >
+        ×
+      </button>
+
+      <div className="whatsapp-qr-heading">
+        <span className="whatsapp-modal-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"
+              d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3z"/>
+            <path fill="currentColor" d="M14 14h3v3h-3zM18 14h3v3h-3zM14 18h3v3h-3zM18 18h3v3h-3z"/>
+          </svg>
+        </span>
+        <div>   
+          <h2>{t('Open on your phone','افتح على هاتفك')}</h2>
+          <p>DR. ASHISH BHOLA CENTER</p>
+        </div>
+      </div>
+
+      <div className="whatsapp-qr-body">
+        <div className="whatsapp-qr-image">
+          <img src="/media/kiosk-qr.png" alt="Kiosk QR Code"/>
+          <i className="qr-corner tl"/><i className="qr-corner tr"/>
+          <i className="qr-corner bl"/><i className="qr-corner br"/>
+        </div>
+
+        <div className="whatsapp-qr-info">
+          <span className="whatsapp-qr-label">KIOSK</span>
+          <h3>{t('Take our clinic guide with you','خذ دليل مركزنا معك')}</h3>
+          <p className="whatsapp-qr-description">
+            {t(
+              'Scan this QR code to browse our treatments, doctors and offers on your own phone.',
+              'امسح رمز الاستجابة السريعة لتصفح علاجاتنا وأطبائنا وعروضنا على هاتفك.'
+            )}
+          </p>
+          <ol className="whatsapp-qr-steps">
+            <li><b>1</b>{t('Open your phone camera','افتح كاميرا هاتفك')}</li>
+            <li><b>2</b>{t('Point it at the code','وجّهها نحو الرمز')}</li>
+            <li><b>3</b>{t('Tap the link to open','اضغط الرابط للفتح')}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
             </div>
 
@@ -747,20 +962,20 @@ export default function Visitor(){
               {t('WELCOME TO OUR CLINIC','مرحباً بكم في مركزنا')}
             </div>
 
-           <h1>
-  {field(data.welcome, 'title')
-    .split('\n')
-    .map((line, i) => (
-      <span key={i} className={i === 1 ? 'gold-text' : ''}>
-        {line}
-        {i === 0 && <br />}
-      </span>
-    ))}
-</h1>
+            <h1>
+              {field(data.welcome, 'title')
+                .split('\n')
+                .map((line, i) => (
+                  <span key={i} className={i === 1 ? 'gold-text' : ''}>
+                    {line}
+                    {i === 0 && <br />}
+                  </span>
+                ))}
+            </h1>
 
-<p>
-  {field(data.welcome, 'description')}
-</p>
+            <p>
+              {field(data.welcome, 'description')}
+            </p>
 
           </div>
 
@@ -1028,7 +1243,7 @@ export default function Visitor(){
           title:t('Information','معلومات'),
           text:t(
             'Please contact reception for details.',
-            'يرجى التواصل مع الاستقبال للحصول على التفاصيل.'
+            'يرجى التحدث مع الاستقبال للحصول على التفاصيل.'
           )
         });
       }
@@ -1166,6 +1381,7 @@ export default function Visitor(){
 
     const email=field(data.contact,'email');
 
+    // Instagram, Facebook, TikTok and Email only
     const socialLinks=[
       {
         key:'instagram',
@@ -1178,6 +1394,10 @@ export default function Visitor(){
       {
         key:'tiktok',
         value:data.contact.tiktok
+      },
+      {
+        key:'email',
+        value:email
       }
     ].filter(item=>item.value);
 
@@ -1291,15 +1511,6 @@ export default function Visitor(){
                   {phone}
                 </a>
               ))}
-
-              {email&&(
-                <a
-                  href={contactLink(email,'email')}
-                  className="contact-team-link"
-                >
-                  {email}
-                </a>
-              )}
 
             </div>
 
