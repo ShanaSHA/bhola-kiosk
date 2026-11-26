@@ -335,3 +335,57 @@
     right: auto;
     left: 10px;
 }
+
+/* =========================================================
+   RESPONSIVE OVERRIDES — main site and admin UI
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { width: 100%; overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+body, #root { width: 100%; min-width: 320px; max-width: 100%; margin: 0; overflow-x: clip; }
+img, video, iframe { max-width: 100%; }
+button, input, select, textarea { max-width: 100%; }
+
+@media (max-width: 900px) {
+  .topbar { gap: 12px; padding-left: 4%; padding-right: 4%; }
+  .hero, .detail-layout, .about-layout, .contact-layout { min-width: 0; }
+  .hero-copy, .detail-copy, .manage-panel, .admin-note { min-width: 0; }
+  .admin-main, .admin-content, .manage-panel { max-width: 100%; }
+  .admin-tabs { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+@media (max-width: 640px) {
+  .topbar { min-height: 68px; height: auto; padding: 10px 4%; flex-wrap: wrap; }
+  .header-right { gap: 8px; }
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .hero-copy { width: 100%; min-width: 0; }
+  .hero h1, .section-heading h1, .detail-copy h1 { overflow-wrap: anywhere; }
+  .category-grid, .cards, .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail-layout, .about-layout, .contact-layout { grid-template-columns: minmax(0, 1fr); }
+  .contact-details { grid-template-columns: minmax(0, 1fr); }
+  .edit-grid { grid-template-columns: minmax(0, 1fr); }
+  .manage-row { min-width: 0; flex-wrap: wrap; }
+  .manage-row > * { min-width: 0; }
+  .footer { flex-wrap: wrap; padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); }
+  .bottom-nav { padding-bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+  .bottom-nav button { min-width: 0; flex: 1 1 0; }
+  .admin-tabs { flex-wrap: nowrap; }
+  .admin-tabs button { flex: 0 0 auto; }
+  .editor-dialog, .modal, .dialog { width: min( calc(100% - 24px), 640px ); max-width: calc(100% - 24px); max-height: calc(100dvh - 24px); overflow: auto; }
+}
+@media (max-width: 430px) {
+  .category-grid, .cards, .stats { grid-template-columns: minmax(0, 1fr); }
+  .topbar { align-items: center; }
+  .header-right .outline-button { white-space: normal; }
+  .category-card > img { width: 100%; }
+  .contact-card, .manage-panel { padding: 16px; }
+  .manage-title { flex-wrap: wrap; gap: 12px; }
+  .manage-title .gold-button { max-width: 100%; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero, .hero-visual { min-height: 280px; }
+  .welcome-content { padding-top: 16px; padding-bottom: 16px; }
+}
+@supports (-webkit-touch-callout: none) {
+  input, select, textarea { font-size: 16px; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  .bottom-nav { padding-bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+}
