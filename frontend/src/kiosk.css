@@ -3427,13 +3427,16 @@ html[dir="rtl"] .visitor-app .banner-photo {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+
     width: 38px !important;
     height: 38px !important;
     flex: 0 0 38px !important;
+
     border: 1px solid #ffffff88 !important;
     border-radius: 50% !important;
     background: transparent !important;
     color: #fff !important;
+
     font-size: 0 !important;
     line-height: 1 !important;
 }
@@ -3445,4 +3448,29 @@ html[dir="rtl"] .visitor-app .banner-photo {
     font-weight: 400 !important;
     color: #fff !important;
     line-height: 1 !important;
+}
+
+/* MOBILE — iPhone and Android */
+@container (max-width: 610px) {
+    .visitor-app .circle-arrow {
+        width: 30px !important;
+        height: 30px !important;
+        flex: 0 0 30px !important;
+    }
+
+    .visitor-app .circle-arrow::before {
+        font-size: 18px !important;
+    }
+}
+
+@media (max-width: 610px) {
+    .visitor-app .circle-arrow {
+        width: 30px !important;
+        height: 30px !important;
+        flex: 0 0 30px !important;
+    }
+
+    .visitor-app .circle-arrow::before {
+        font-size: 18px !important;
+    }
 }
