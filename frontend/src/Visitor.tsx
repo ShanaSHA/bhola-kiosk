@@ -995,9 +995,23 @@ const slides = banners;
 
             <div className="footer-actions">
 
-              <button onClick={back}>
-                {t('← Back','عودة →')}
-              </button>
+             <button onClick={back}>
+  {t('← Back','عودة →')}
+</button>
+
+{(screen==='about'||screen==='contact')&&(
+  <button
+    onClick={()=>{
+      setPosition(p=>({
+        ...p,
+        page:Math.min(p.page+1,totalPages-1)
+      }));
+    }}
+    disabled={page>=totalPages-1}
+  >
+    {t('Next →','التالي ←')}
+  </button>
+)}
 
               {[
                 {label:t('Home','الرئيسية'),screen:'home'},
