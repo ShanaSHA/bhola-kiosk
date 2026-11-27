@@ -1,5 +1,6 @@
 
 import {useEffect,useRef,useState,type ReactNode} from 'react';
+import BackgroundVideo from './components/BackgroundVideo';
 import {apiFetch} from './lib/api';
 import {initialContent,type Content,type Item} from './lib/content';
 import './kiosk.css';
@@ -304,6 +305,38 @@ export default function Visitor(){
   useEffect(()=>{
     mainRef.current?.scrollTo(0,0);
   },[position,lang]);
+
+  // Mobile hamburger menu
+  const [menuOpen,setMenuOpen]=useState(false);
+  const footerRef=useRef<HTMLElement>(null);
+  const menuButtonRef=useRef<HTMLButtonElement>(null);
+
+  useEffect(()=>{
+    setMenuOpen(false);
+  },[screen,lang]);
+
+  useEffect(()=>{
+    if(!menuOpen)return;
+
+    const onPointerDown=(e:PointerEvent)=>{
+      if(!footerRef.current?.contains(e.target as Node))setMenuOpen(false);
+    };
+
+    const onKeyDown=(e:KeyboardEvent)=>{
+      if(e.key==='Escape'){
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('pointerdown',onPointerDown);
+    document.addEventListener('keydown',onKeyDown);
+
+    return()=>{
+      document.removeEventListener('pointerdown',onPointerDown);
+      document.removeEventListener('keydown',onKeyDown);
+    };
+  },[menuOpen]);
 
   // Navigation
   function go(next:Screen,extras:Partial<Position>={}){
@@ -638,20 +671,15 @@ export default function Visitor(){
         {!language?(
           <>
 
-            <video
+            <BackgroundVideo
               key={welcomeVideo}
               className="welcome-video"
-              autoPlay
-              muted
-              playsInline
-              poster="/media/dr-ashish-bhola-logo.jpg"
+              src={welcomeVideo}
+              type={videoType(welcomeVideo)}
+              poster=""
+              playLabel={t('Play video','تشغيل الفيديو')}
               onEnded={()=>go('language')}
-            >
-              <source
-                src={welcomeVideo}
-                type={videoType(welcomeVideo)}
-              />
-            </video>
+            />
 
             <div className="welcome-overlay"/>
 
@@ -852,20 +880,15 @@ export default function Visitor(){
         ):(
           <>
 
-            <video
+            <BackgroundVideo
               key={languageVideo}
               className="welcome-video language-video"
-              autoPlay
-              muted
+              src={languageVideo}
+              type={videoType(languageVideo)}
+              poster="/media/clinic-intro-poster.jpg"
+              playLabel={t('Play video','تشغيل الفيديو')}
               loop
-              playsInline
-              poster="/media/dr-ashish-bhola-logo.jpg"
-            >
-              <source
-                src={languageVideo}
-                type={videoType(languageVideo)}
-              />
-            </video>
+            />
 
             <div className="welcome-overlay language-overlay"/>
 
@@ -1631,11 +1654,29 @@ export default function Visitor(){
         </main>
 
         {!['welcome','language'].includes(screen)&&(
-          <footer className="footer">
+          <footer ref={footerRef} className="footer">
 
-            <div className="footer-actions">
+            <button
+              ref={menuButtonRef}
+              type="button"
+              className="footer-menu-toggle"
+              aria-expanded={menuOpen}
+              aria-controls="footer-menu"
+              onClick={()=>setMenuOpen(o=>!o)}
+            >
+              <span className="footer-menu-icon" aria-hidden="true">
+                <span/><span/><span/>
+              </span>
+              <span>{t('Menu','القائمة')}</span>
+            </button>
 
-              <button onClick={back}>
+            <nav
+              id="footer-menu"
+              className={`footer-actions${menuOpen?' open':''}`}
+              aria-label={t('Main navigation','التنقل الرئيسي')}
+            >
+
+              <button onClick={()=>{setMenuOpen(false);back();}}>
                 {t('← Back','عودة →')}
               </button>
 
@@ -1649,7 +1690,7 @@ export default function Visitor(){
               ].map(menu=>(
                 <button
                   key={menu.screen}
-                  onClick={()=>go(menu.screen as Screen)}
+                  onClick={()=>{setMenuOpen(false);go(menu.screen as Screen);}}
                   className={screen===menu.screen?'nav-active':''}
                   aria-current={
                     screen===menu.screen?'page':undefined
@@ -1659,7 +1700,7 @@ export default function Visitor(){
                 </button>
               ))}
 
-            </div>
+            </nav>
 
           </footer>
         )}
